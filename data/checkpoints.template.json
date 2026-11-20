@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "origin": { "lat": 40.94736, "lng": -73.06979, "note": "Ferry terminal seed origin" },
+  "finale": {
+    "title": "Port Jefferson Ferry",
+    "subtitle": "Long Island Sound crossing to Bridgeport, Connecticut",
+    "imageKey": "finale/ferry-puzzle.jpg",
+    "closingLine": "Nine pieces of the harbor — one ferry still ties Long Island to Connecticut."
+  },
+  "checkpoints": [
+    {
+      "id": "shipbuilders-memorial",
+      "name": "Shipbuilders Memorial",
+      "lat": 40.9489,
+      "lng": -73.0666,
+      "radiusM": 45,
+      "priority": true,
+      "blurb": "Harborfront Park’s landmark sculpture honors the shipbuilders who framed Port Jefferson’s working waterfront.",
+      "facts": [
+        "The sculpture shows builders carrying a hull frame toward the harbor.",
+        "Harborfront Park replaced earlier industrial waterfront uses, including oil terminal land."
+      ]
+    },
+    {
+      "id": "ferry-terminal",
+      "name": "Ferry Terminal",
+      "lat": 40.94736,
+      "lng": -73.06979,
+      "radiusM": 50,
+      "priority": true,
+      "blurb": "The Bridgeport & Port Jefferson ferry terminal is the village’s living bridge across Long Island Sound.",
+      "facts": [
+        "Ferries connect Port Jefferson, NY to Bridgeport, CT.",
+        "The terminal sits on West Broadway at the harbor’s edge."
+      ]
+    },
+    {
+      "id": "bayles-shipyard",
+      "name": "Bayles Shipyard",
+      "lat": 40.94833,
+      "lng": -73.06806,
+      "radiusM": 50,
+      "priority": true,
+      "blurb": "Bayles Shipyard is a National Register site — chandlery, machine shop, and mould loft that powered a shipbuilding village.",
+      "facts": [
+        "Listed on the National Register of Historic Places in 2000.",
+        "The 1917 machine shop and mould loft later anchored civic harbor reuse."
+      ]
+    },
+    {
+      "id": "historical-society",
+      "name": "Historical Society Museum",
+      "lat": 40.94601,
+      "lng": -73.06561,
+      "radiusM": 40,
+      "priority": true,
+      "blurb": "The Mather House Museum complex keeps Port Jefferson’s shipbuilding and village stories in one hillside campus.",
+      "facts": [
+        "Headquarters of the Historical Society of Greater Port Jefferson.",
+        "Outbuildings include a tool shed, sail loft collections, and period shop recreations."
+      ]
+    },
+    {
+      "id": "village-center",
+      "name": "Village Center",
+      "lat": 40.94841,
+      "lng": -73.0675,
+      "radiusM": 40,
+      "priority": false,
+      "blurb": "The Village Center turns former shipyard fabric into a public harbor hub.",
+      "facts": [
+        "Civic programming and gatherings sit where industry once dominated the shoreline."
+      ]
+    },
+    {
+      "id": "main-street",
+      "name": "Main Street",
+      "lat": 40.9458,
+      "lng": -73.0682,
+      "radiusM": 40,
+      "priority": false,
+      "blurb": "Main Street is the everyday village spine between the hills and the harbor.",
+      "facts": [
+        "Shops and sidewalks frame how most visitors first meet downtown Port Jefferson."
+      ]
+    },
+    {
+      "id": "harbourfront-dining",
+      "name": "Waterfront Dining",
+      "lat": 40.9482,
+      "lng": -73.0672,
+      "radiusM": 40,
+      "priority": false,
+      "blurb": "Harbor dining is part of Port Jeff’s welcome — tables facing the same water the ferry crosses.",
+      "facts": [
+        "Waterfront restaurants and inns cluster along the Broadway harbor edge."
+      ]
+    },
+    {
+      "id": "drowned-meadow",
+      "name": "Drowned Meadow Cottage Museum",
+      "lat": 40.94553,
+      "lng": -73.072,
+      "radiusM": 40,
+      "priority": false,
+      "blurb": "Drowned Meadow Cottage remembers an earlier landscape before the modern downtown filled the meadow.",
+      "facts": [
+        "A compact museum stop that deepens the village story beyond the postcard harbor."
+      ]
+    },
+    {
+      "id": "harbor-overlook",
+      "name": "Harbor Overlook",
+      "lat": 40.9491,
+      "lng": -73.0678,
+      "radiusM": 45,
+      "priority": false,
+      "blurb": "From the overlook, Long Island Sound opens — the path the ferry still takes to Connecticut.",
+      "facts": [
+        "Sightlines across the harbor reconnect park, shipyard memory, and the ferry route."
+      ]
+    }
+  ]
+}
