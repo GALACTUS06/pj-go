@@ -12,7 +12,12 @@ Fill concrete image filenames when assets are added.
 
 ## Finale art
 
-- Port Jefferson–Bridgeport ferry illustration/photo — **TBD** (prefer CC / rights-cleared still; record author + license here).
+- Select & download during Step 2 — see [ASSET_PIPELINE.md](./ASSET_PIPELINE.md).
+- Candidate pool (verify license on use):
+  - https://commons.wikimedia.org/wiki/Category:Bridgeport_and_Port_Jefferson_Ferry
+  - https://commons.wikimedia.org/wiki/File:Port_Jefferson_ferry.JPG
+  - https://commons.wikimedia.org/wiki/File:Port_Jefferson-Bridgeport_Ferry_Terminal;_West_Side.jpg (CC BY-SA 4.0, DanTD)
+- When chosen, replace with: filename, author, license, source URL, retrieval date.
 
 ## Historical references (copy research)
 

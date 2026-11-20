@@ -276,5 +276,6 @@ Indoor third-person, camera photo matching, jump worlds, multiplayer, paid Googl
 - [x] Deploy & QA  
 - [x] Credits / licensing notes  
 - [x] Non-goals  
+- [x] Asset acquisition pipeline (OSM, ferry CC photos, icons)  
 
 **Implementation code is not part of this pack yet** — this is the complete **solution specification**. Next action: execute Step 0 (create `pj-go` repo + scaffold) per [IMPLEMENTATION_TASKS.md](./IMPLEMENTATION_TASKS.md).
