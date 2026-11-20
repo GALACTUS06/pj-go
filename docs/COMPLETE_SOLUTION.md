@@ -25,7 +25,8 @@ Related docs (detail packs):
 | [IMPLEMENTATION_TASKS.md](./IMPLEMENTATION_TASKS.md) | Ticket-level work breakdown |
 | [DEPLOYMENT.md](./DEPLOYMENT.md) | Repo, Pages, PWA |
 | [QA_CHECKLIST.md](./QA_CHECKLIST.md) | Acceptance tests |
-| [CREDITS.md](./CREDITS.md) | Attribution |
+| [ASSET_PIPELINE.md](./ASSET_PIPELINE.md) | **Find & license all materials** (OSM, ferry art, icons) |
+| [CREDITS.md](./CREDITS.md) | Attribution log |
 | [`../data/checkpoints.template.json`](../data/checkpoints.template.json) | Machine-readable seeds |
 
 ---
@@ -222,11 +223,13 @@ Full command recipe: [GEO_PIPELINE.md](./GEO_PIPELINE.md).
 
 ---
 
-## H. Content solution
+## H. Content & asset solution
 
 - Nine sites with full English copy: [CONTENT_SITES.md](./CONTENT_SITES.md).  
-- Finale art: ferry hero still (rights-cleared) or simple original illustration.  
-- Restaurant site uses zone name **Waterfront Dining** until a single venue is branded.
+- **How to obtain every material** (OSM extract, CC ferry photos with Commons links, icons, optional site stills): [ASSET_PIPELINE.md](./ASSET_PIPELINE.md).  
+- Finale art: ferry hero still (rights-cleared) or simple original illustration — candidates listed in ASSET_PIPELINE §3.  
+- Restaurant site uses zone name **Waterfront Dining** until a single venue is branded.  
+- Log every downloaded still in [CREDITS.md](./CREDITS.md).
 
 ---
 

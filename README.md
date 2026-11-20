@@ -32,6 +32,7 @@ Stony Brook prototype archive: [`GALACTUS06/sb-go`](https://github.com/GALACTUS0
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Stack & modules |
 | [DEPLOYMENT.md](docs/DEPLOYMENT.md) | New repo + Pages |
 | [QA_CHECKLIST.md](docs/QA_CHECKLIST.md) | Acceptance tests |
+| [ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md) | **Find materials** (OSM, ferry CC photos, icons) |
 | [CREDITS.md](docs/CREDITS.md) | Licenses |
 | [data/checkpoints.template.json](data/checkpoints.template.json) | Seed data |
 
