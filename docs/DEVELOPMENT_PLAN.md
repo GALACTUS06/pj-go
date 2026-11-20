@@ -5,6 +5,8 @@
 **Document status:** Locked for MVP implementation  
 **Language:** English UI and content  
 
+> **Master index:** For the full end-to-end solution (flows, geo pipeline, tasks, deploy, copy), see **[COMPLETE_SOLUTION.md](./COMPLETE_SOLUTION.md)**.
+
 ---
 
 ## 1. Vision
