@@ -88,16 +88,47 @@ On collect: toast `Piece unlocked ({n}/9)` → close or keep open one beat.
 
 - Mode preference: Virtual / Live  
 - Camera preference  
+- Privacy blurb (see COPY_DECK `settings.privacyBody`)  
 - `Reset all progress` (confirm)  
 - Credits / licenses text  
+- Clear cached app data → link `/clear-cache.html`  
 - Build version  
+- Dev: long-press version → teleport to site  
 
 ---
 
-## 8. Empty / error states
+## 8. Tutorial (first run only)
+
+Three coach marks over PlayScene (COPY_DECK `tutorial.steps`).  
+Skip or finish sets `tutorialDone`. Never show again unless Reset.
+
+---
+
+## 9. Wayfinding chrome
+
+- Floating world labels on uncollected checkpoints  
+- HUD **Next** chip + compass arrow  
+- Sites drawer: 9 rows with Collected / Go (sets nav beacon)  
+
+---
+
+## 10. WebGL / 2D fallback
+
+If WebGL unavailable or canvas init fails:
+
+1. Replace PlayScene with **FallbackSitesPage** (site list; optional Leaflet OSM).  
+2. Virtual **Go** places player at site center for check-in.  
+3. Same Collect → puzzle → finale path.  
+
+Copy: `play.webglFallbackTitle` / `Body`.
+
+---
+
+## 11. Empty / error states
 
 | State | UI |
 |-------|-----|
 | GPS denied | Toast + force Virtual controls visible |
 | GeoJSON missing | Full-screen error `Harbor map failed to load` + retry |
 | Outside playable box (Live) | Banner `Head toward the harbor district` |
+| WebGL fail | Fallback site list (still completable) |

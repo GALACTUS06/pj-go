@@ -151,11 +151,14 @@ Local-only (`localStorage`):
   checkedInSiteIds: string[],   // subset of 9
   puzzlePieceIds: string[],     // same as site ids for MVP
   finaleRevealed: boolean,
-  settings: { reducedMotion?: boolean }
+  tutorialDone: boolean,
+  reducedMotion?: boolean,
+  navBeaconSiteId?: string | null
 }
 ```
 
-Reset in Settings. No account server.
+Key: `pj-go-save-v1`. Reset in Settings. No account server.  
+Contracts: [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md).
 
 ---
 
@@ -230,8 +233,8 @@ Reset in Settings. No account server.
 
 ## 16. Open items (non-blocking)
 
-- Exact ferry finale artwork file.
-- Final restaurant checkpoint display name after local preference.
-- Whether minimap ships in MVP or phase 2 (default: **phase 2**).
+- Final restaurant checkpoint display name after local preference (zone name **Waterfront Dining** ships).
+- Whether minimap ships in phase 2+ (default: **not MVP**).
+- Tune hand-authored water polygon after first Virtual playtest.
 
-Everything else in this document is **decided** for implementation kickoff.
+Ferry art, icons, GeoJSON, copy deck, acceptance, and module contracts are **closed** — see [BUILD_READY.md](./BUILD_READY.md).

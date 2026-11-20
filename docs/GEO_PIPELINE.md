@@ -53,6 +53,12 @@ Convert OSM JSON → GeoJSON (e.g. `osmtogeojson` CLI or script).
 - `public/geo/port-jefferson-buildings.geojson`
 - `public/geo/port-jefferson-water.geojson`
 
+**Script:** `node scripts/fetch-osm.mjs` (sends a proper User-Agent).
+
+**Water note:** OSM water tags inside this bbox are often sparse. MVP ships a **hand-authored harbor basin** collider in `port-jefferson-water.geojson` for reliable Virtual blocking. Re-merge OSM water when a fuller extract is available.
+
+**Buildings:** ways-first converter is enough for white-box; ≥20 footprints required (current extract ≫20).
+
 ---
 
 ## 3. Local projection

@@ -1,0 +1,28 @@
+:root {
+  --pj-navy: #0b1f33;
+  --pj-navy-ink: #06141f;
+  --pj-ferry-red: #c8102e;
+  --pj-sea: #2f6f8f;
+  --pj-foam: #f4f7fa;
+  --pj-mist: #e2e8ee;
+  --pj-sand: #d9c7a8;
+  --pj-marker: #f0b429;
+  --pj-marker-done: #5b8c5a;
+  --pj-white: #ffffff;
+
+  --pj-font: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --pj-size-title: clamp(1.75rem, 5vw, 2.25rem);
+  --pj-size-body: 1rem;
+  --pj-size-small: 0.875rem;
+  --pj-weight-bold: 700;
+  --pj-weight-medium: 600;
+
+  --pj-tap-min: 44px;
+  --pj-sheet-radius: 16px;
+  --pj-chip-radius: 10px;
+  --pj-joystick: 120px;
+
+  color: var(--pj-navy);
+  background: var(--pj-foam);
+  font-family: var(--pj-font);
+}

@@ -1,0 +1,18 @@
+{
+  "name": "PJ Go",
+  "short_name": "PJ Go",
+  "description": "Explore Port Jefferson harbor — collect 9 pieces, reveal the ferry.",
+  "theme_color": "#0B1F33",
+  "background_color": "#F4F7FA",
+  "display": "standalone",
+  "start_url": "/pj-go/",
+  "scope": "/pj-go/",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

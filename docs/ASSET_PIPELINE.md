@@ -179,12 +179,12 @@ docs/
 
 ## 9. Acquisition checklist (do in Step 2 before ship)
 
-- [ ] A1 buildings GeoJSON committed  
-- [ ] A2 water GeoJSON committed  
-- [ ] A3 ferry finale downloaded **with license logged in CREDITS**  
-- [ ] A5/A6 icons created  
-- [ ] Optional A11 skipped or CC-cleared  
-- [ ] No All-Rights-Reserved images in `public/`  
+- [x] A1 buildings GeoJSON committed (`public/geo/port-jefferson-buildings.geojson`)  
+- [x] A2 water GeoJSON committed (playable basin; OSM sparse)  
+- [x] A3 ferry finale downloaded **with license logged in CREDITS**  
+- [x] A5/A6 icons created (SVG; rasterize 192/512 if needed at ship)  
+- [x] Optional A11 skipped  
+- [x] No All-Rights-Reserved images in `public/`  
 
 ---
 

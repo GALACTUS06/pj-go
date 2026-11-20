@@ -1,0 +1,51 @@
+{
+  "type": "FeatureCollection",
+  "properties": {
+    "source": "Hand-authored playable harbor water for PJ Go MVP collider (OSM water tags sparse in bbox). Aligns to Port Jefferson Harbor basin north of Broadway.",
+    "note": "Replace/augment with fuller OSM extract when available. © OpenStreetMap still credited for buildings.",
+    "generatedAt": "2026-11-20"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "pj-harbor-basin",
+        "natural": "water",
+        "name": "Port Jefferson Harbor (playable)"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-73.0728, 40.9470],
+            [-73.0625, 40.9472],
+            [-73.0622, 40.9508],
+            [-73.0735, 40.9508],
+            [-73.0740, 40.9488],
+            [-73.0728, 40.9470]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "pj-harbor-inner",
+        "natural": "water",
+        "name": "Inner harbor / marina edge"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-73.0708, 40.9474],
+            [-73.0660, 40.9476],
+            [-73.0655, 40.9492],
+            [-73.0705, 40.9490],
+            [-73.0708, 40.9474]
+          ]
+        ]
+      }
+    }
+  ]
+}

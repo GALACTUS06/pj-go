@@ -3,7 +3,20 @@
 Nine outdoor checkpoints. **One check-in → one puzzle piece.**  
 Coordinates are **v0 seeds** (WGS84). Re-survey with phone GPS before lock.
 
-Finale grid: **3×3**, piece `id` = site `id`.
+Finale grid: **3×3**, piece `id` = site `id`.  
+`puzzleSlot` 0–8 is **row-major** (0 = top-left). Locked in `data/checkpoints.template.json`.
+
+| puzzleSlot | Site id |
+|------------|---------|
+| 0 | `ferry-terminal` |
+| 1 | `shipbuilders-memorial` |
+| 2 | `bayles-shipyard` |
+| 3 | `village-center` |
+| 4 | `historical-society` |
+| 5 | `main-street` |
+| 6 | `harbourfront-dining` |
+| 7 | `drowned-meadow` |
+| 8 | `harbor-overlook` |
 
 ---
 
@@ -17,7 +30,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Area | Jeanne Garant Harborfront Park |
 | Seed lat/lng | 40.94890, -73.06660 |
 | Radius m | 45 |
-| Puzzle slot | (1,1) center-top or assign in UI order |
+| Puzzle slot | 1 |
 | Blurb hook | Landmark sculpture of shipbuilders carrying a hull frame toward the harbor — honor to Port Jeff’s building yards. |
 
 ### 2. `ferry-terminal`
@@ -29,6 +42,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Address hint | 102 W Broadway |
 | Seed lat/lng | 40.94736, -73.06979 |
 | Radius m | 50 |
+| Puzzle slot | 0 |
 | Blurb hook | The village’s living link to Connecticut — ferries across Long Island Sound to Bridgeport. |
 
 ### 3. `bayles-shipyard`
@@ -40,6 +54,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Address hint | 101 E Broadway |
 | Seed lat/lng | 40.94833, -73.06806 |
 | Radius m | 50 |
+| Puzzle slot | 2 |
 | Blurb hook | From wooden shipbuilding to wartime work to today’s civic harbor uses — industrial heart of the waterfront. |
 
 ### 4. `historical-society`
@@ -51,6 +66,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Address hint | 115 Prospect St |
 | Seed lat/lng | 40.94601, -73.06561 |
 | Radius m | 40 |
+| Puzzle slot | 4 |
 | Blurb hook | Mather family home and museum campus — clocks, tools, sail loft, and village memory. |
 
 ---
@@ -64,6 +80,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Display name | Village Center |
 | Seed lat/lng | 40.94841, -73.06750 *(tune to plaza / Village Center entrance)* |
 | Radius m | 40 |
+| Puzzle slot | 3 |
 | Blurb hook | Civic harbor hub in reused shipyard fabric — where industry became public space. |
 
 ### 6. `main-street`
@@ -73,6 +90,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Display name | Main Street |
 | Seed lat/lng | 40.94580, -73.06820 *(tune to E Main St corridor)* |
 | Radius m | 40 |
+| Puzzle slot | 5 |
 | Blurb hook | Shop streets of the incorporated village — everyday Port Jeff between hill and harbor. |
 
 ### 7. `harbourfront-dining`
@@ -82,6 +100,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Display name | Waterfront Dining |
 | Seed lat/lng | 40.94820, -73.06720 *(Harbourfront / Danfords dining zone — confirm on survey)* |
 | Radius m | 40 |
+| Puzzle slot | 6 |
 | Blurb hook | Harbor dining culture — visitors and locals sharing the working waterfront. |
 | Note | Generic zone name until a single restaurant is officially preferred. |
 
@@ -93,6 +112,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Address hint | 141 W Broadway |
 | Seed lat/lng | 40.94553, -73.07200 |
 | Radius m | 40 |
+| Puzzle slot | 7 |
 | Blurb hook | Early settlement memory near the meadow that became downtown — deeper than the ferry postcard. |
 
 ### 9. `harbor-overlook`
@@ -102,6 +122,7 @@ Finale grid: **3×3**, piece `id` = site `id`.
 | Display name | Harbor Overlook |
 | Seed lat/lng | 40.94910, -73.06780 *(pier / park sightline to Sound)* |
 | Radius m | 45 |
+| Puzzle slot | 8 |
 | Blurb hook | Look out across the harbor — the same water the ferry still crosses to Bridgeport. |
 
 ---

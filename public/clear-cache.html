@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PJ Go — Clear cache</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 32rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        color: #0b1f33;
+        background: #f4f7fa;
+      }
+      button {
+        background: #c8102e;
+        color: #fff;
+        border: 0;
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Clear PJ Go cache</h1>
+    <p>
+      Use this if the app looks stuck on an old version after a deploy. Then reopen
+      the game.
+    </p>
+    <button id="go" type="button">Unregister service workers &amp; clear caches</button>
+    <p id="status"></p>
+    <script>
+      document.getElementById('go').onclick = async () => {
+        const status = document.getElementById('status')
+        try {
+          if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations()
+            await Promise.all(regs.map((r) => r.unregister()))
+          }
+          if ('caches' in window) {
+            const keys = await caches.keys()
+            await Promise.all(keys.map((k) => caches.delete(k)))
+          }
+          status.textContent = 'Done. You can close this tab and reopen PJ Go.'
+        } catch (e) {
+          status.textContent = 'Failed: ' + e
+        }
+      }
+    </script>
+  </body>
+</html>

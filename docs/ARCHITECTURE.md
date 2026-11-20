@@ -40,22 +40,28 @@ Until Phase 0 spike says otherwise:
 
 ## 4. Module layout (target)
 
+Full tree + deps: [SCAFFOLD.md](./SCAFFOLD.md).  
+Drop-in algorithms: [`../reference/domain/`](../reference/domain/).
+
 ```text
 src/
   app routes & shell
   config/        brand, geo origin, features
+  copy/          en.ts
   data/          checkpoints.ts
-  domain/        distance, check-in, progress
+  domain/        geo, checkIn, save, types
   location/      usePlayerLocation (GPS)
   scene/         Canvas, Buildings, Avatar, Checkpoints, Cameras, Controls
   state/         useGameStore
   storage/       load/save
-  pages/         Home, Play, Puzzle, Settings
+  pages/         Home, Play, Puzzle, Settings, FallbackSites
 public/
-  geo/           osm extract
-  finale/        ferry puzzle image + piece masks optional
+  geo/           buildings + water
+  finale/        ferry-puzzle.jpg
   icons/
 ```
+
+**Phase 0 spike default (locked unless spike fails):** Three.js + R3F.
 
 ## 5. Input
 

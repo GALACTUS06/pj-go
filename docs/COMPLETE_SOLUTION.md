@@ -27,8 +27,16 @@ Related docs (detail packs):
 | [QA_CHECKLIST.md](./QA_CHECKLIST.md) | Acceptance tests |
 | [ASSET_PIPELINE.md](./ASSET_PIPELINE.md) | **Find & license all materials** (OSM, ferry art, icons) |
 | [GAP_ANALYSIS.md](./GAP_ANALYSIS.md) | Engineer review — remaining gaps & locked fixes |
+| [ACCEPTANCE.md](./ACCEPTANCE.md) | **Delivery gate** — when MVP is done |
+| [BUILD_READY.md](./BUILD_READY.md) | Verdict: pack is build-ready |
+| [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md) | Exact algorithms & APIs |
+| [COPY_DECK.md](./COPY_DECK.md) | Every English UI string |
+| [BRAND_TOKENS.md](./BRAND_TOKENS.md) | Colors, type, motion |
+| [SCAFFOLD.md](./SCAFFOLD.md) | package.json, file tree, Vite/PWA |
+| [CLEANUP_SBU.md](./CLEANUP_SBU.md) | What to delete before scaffolding |
 | [CREDITS.md](./CREDITS.md) | Attribution log |
 | [`../data/checkpoints.template.json`](../data/checkpoints.template.json) | Machine-readable seeds |
+| [`../reference/`](../reference/) | Drop-in domain + copy + tokens |
 
 ---
 
@@ -139,6 +147,10 @@ Full gap list: [GAP_ANALYSIS.md](./GAP_ANALYSIS.md).
 | F11 | PWA installability + offline shell for app chrome (geo may need network first load) |
 | F12 | English UI only |
 | F13 | No Google Maps API keys |
+| F14 | Virtual wayfinding: world labels + Next chip + compass |
+| F15 | One-time tutorial coach marks |
+| F16 | WebGL failure → 2D site list still completable |
+| F17 | Water collision on; building collision off |
 
 ---
 
@@ -183,8 +195,13 @@ type SaveV1 = {
   checkedInSiteIds: string[]
   puzzlePieceIds: string[] // MVP: same as site ids
   finaleRevealed: boolean
+  tutorialDone: boolean
+  reducedMotion?: boolean
+  navBeaconSiteId?: string | null
 }
 ```
+
+Storage key: `pj-go-save-v1`. Full contracts: [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md).
 
 ### F3. Runtime avatar
 
@@ -286,14 +303,19 @@ Indoor third-person, camera photo matching, jump worlds, multiplayer, paid Googl
 - [x] 9 checkpoints + puzzle + ferry finale  
 - [x] Tech stack & architecture  
 - [x] Geo / white-box pipeline  
-- [x] UI flows  
-- [x] Full site copy  
+- [x] UI flows + tutorial + fallback  
+- [x] Full site copy + UI copy deck  
+- [x] Module contracts + reference TypeScript  
+- [x] Acceptance / delivery gate  
+- [x] Brand tokens  
+- [x] Scaffold / deps / PWA manifest spec  
 - [x] Phased delivery + task breakdown  
 - [x] Deploy & QA  
 - [x] Credits / licensing notes  
 - [x] Non-goals  
-- [x] Asset acquisition pipeline (OSM, ferry CC photos, icons)  
-- [x] Engineer gap analysis + playability locks (wayfinding, speeds, fallbacks)  
+- [x] Asset acquisition pipeline  
+- [x] **Build artifacts on disk:** buildings GeoJSON, water collider, ferry JPG, icons  
+- [x] Engineer gap analysis + playability locks  
 
-**Implementation code / binary assets are not in the repo yet** — this pack is the complete **solution specification**.  
-**Still to produce before “build-ready”:** GeoJSON extract, ferry image file, icons, `pj-go` GitHub remote, then code (see GAP_ANALYSIS §F).
+**Verdict:** Spec + required assets are **build-ready** — see [BUILD_READY.md](./BUILD_READY.md).  
+**Still to execute:** create `pj-go` remote, wipe SBU leftovers, scaffold app, implement, deploy Pages, pass [ACCEPTANCE.md](./ACCEPTANCE.md).
