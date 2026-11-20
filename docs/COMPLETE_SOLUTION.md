@@ -26,6 +26,7 @@ Related docs (detail packs):
 | [DEPLOYMENT.md](./DEPLOYMENT.md) | Repo, Pages, PWA |
 | [QA_CHECKLIST.md](./QA_CHECKLIST.md) | Acceptance tests |
 | [ASSET_PIPELINE.md](./ASSET_PIPELINE.md) | **Find & license all materials** (OSM, ferry art, icons) |
+| [GAP_ANALYSIS.md](./GAP_ANALYSIS.md) | Engineer review — remaining gaps & locked fixes |
 | [CREDITS.md](./CREDITS.md) | Attribution log |
 | [`../data/checkpoints.template.json`](../data/checkpoints.template.json) | Machine-readable seeds |
 
@@ -66,6 +67,21 @@ Visitors and students need a **simple, playable way** to walk Port Jefferson’s
 ```
 
 **Nothing else is required for MVP** (no indoor maps, no camera scan, no LLM guide).
+
+### B+ Locked playability rules (from engineer gap review)
+
+| Topic | Decision |
+|-------|----------|
+| Collection order | **Free** — any uncollected site |
+| Virtual wayfinding | World labels + **Next nearest** chip + compass arrow (no minimap in MVP) |
+| Move speed | 4.5 m/s Virtual; GPS lerp ~0.3 s |
+| Collisions | Water **on**; buildings **visual only** |
+| Spawn | Ferry terminal |
+| First run | 3-step coach marks once |
+| WebGL fail | Fallback 2D site list — still completable |
+| Privacy | Location on-device only; no accounts; Settings blurb |
+
+Full gap list: [GAP_ANALYSIS.md](./GAP_ANALYSIS.md).
 
 ---
 
@@ -277,5 +293,7 @@ Indoor third-person, camera photo matching, jump worlds, multiplayer, paid Googl
 - [x] Credits / licensing notes  
 - [x] Non-goals  
 - [x] Asset acquisition pipeline (OSM, ferry CC photos, icons)  
+- [x] Engineer gap analysis + playability locks (wayfinding, speeds, fallbacks)  
 
-**Implementation code is not part of this pack yet** — this is the complete **solution specification**. Next action: execute Step 0 (create `pj-go` repo + scaffold) per [IMPLEMENTATION_TASKS.md](./IMPLEMENTATION_TASKS.md).
+**Implementation code / binary assets are not in the repo yet** — this pack is the complete **solution specification**.  
+**Still to produce before “build-ready”:** GeoJSON extract, ferry image file, icons, `pj-go` GitHub remote, then code (see GAP_ANALYSIS §F).

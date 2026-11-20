@@ -1,6 +1,10 @@
 {
   "version": 1,
-  "origin": { "lat": 40.94736, "lng": -73.06979, "note": "Ferry terminal seed origin" },
+  "origin": {
+    "lat": 40.94736,
+    "lng": -73.06979,
+    "note": "Ferry terminal seed origin"
+  },
   "finale": {
     "title": "Port Jefferson Ferry",
     "subtitle": "Long Island Sound crossing to Bridgeport, Connecticut",
@@ -8,19 +12,6 @@
     "closingLine": "Nine pieces of the harbor — one ferry still ties Long Island to Connecticut."
   },
   "checkpoints": [
-    {
-      "id": "shipbuilders-memorial",
-      "name": "Shipbuilders Memorial",
-      "lat": 40.9489,
-      "lng": -73.0666,
-      "radiusM": 45,
-      "priority": true,
-      "blurb": "Harborfront Park’s landmark sculpture honors the shipbuilders who framed Port Jefferson’s working waterfront.",
-      "facts": [
-        "The sculpture shows builders carrying a hull frame toward the harbor.",
-        "Harborfront Park replaced earlier industrial waterfront uses, including oil terminal land."
-      ]
-    },
     {
       "id": "ferry-terminal",
       "name": "Ferry Terminal",
@@ -32,7 +23,22 @@
       "facts": [
         "Ferries connect Port Jefferson, NY to Bridgeport, CT.",
         "The terminal sits on West Broadway at the harbor’s edge."
-      ]
+      ],
+      "puzzleSlot": 0
+    },
+    {
+      "id": "shipbuilders-memorial",
+      "name": "Shipbuilders Memorial",
+      "lat": 40.9489,
+      "lng": -73.0666,
+      "radiusM": 45,
+      "priority": true,
+      "blurb": "Harborfront Park’s landmark sculpture honors the shipbuilders who framed Port Jefferson’s working waterfront.",
+      "facts": [
+        "The sculpture shows builders carrying a hull frame toward the harbor.",
+        "Harborfront Park replaced earlier industrial waterfront uses, including oil terminal land."
+      ],
+      "puzzleSlot": 1
     },
     {
       "id": "bayles-shipyard",
@@ -45,7 +51,21 @@
       "facts": [
         "Listed on the National Register of Historic Places in 2000.",
         "The 1917 machine shop and mould loft later anchored civic harbor reuse."
-      ]
+      ],
+      "puzzleSlot": 2
+    },
+    {
+      "id": "village-center",
+      "name": "Village Center",
+      "lat": 40.94841,
+      "lng": -73.0675,
+      "radiusM": 40,
+      "priority": false,
+      "blurb": "The Village Center turns former shipyard fabric into a public harbor hub.",
+      "facts": [
+        "Civic programming and gatherings sit where industry once dominated the shoreline."
+      ],
+      "puzzleSlot": 3
     },
     {
       "id": "historical-society",
@@ -58,19 +78,8 @@
       "facts": [
         "Headquarters of the Historical Society of Greater Port Jefferson.",
         "Outbuildings include a tool shed, sail loft collections, and period shop recreations."
-      ]
-    },
-    {
-      "id": "village-center",
-      "name": "Village Center",
-      "lat": 40.94841,
-      "lng": -73.0675,
-      "radiusM": 40,
-      "priority": false,
-      "blurb": "The Village Center turns former shipyard fabric into a public harbor hub.",
-      "facts": [
-        "Civic programming and gatherings sit where industry once dominated the shoreline."
-      ]
+      ],
+      "puzzleSlot": 4
     },
     {
       "id": "main-street",
@@ -82,7 +91,8 @@
       "blurb": "Main Street is the everyday village spine between the hills and the harbor.",
       "facts": [
         "Shops and sidewalks frame how most visitors first meet downtown Port Jefferson."
-      ]
+      ],
+      "puzzleSlot": 5
     },
     {
       "id": "harbourfront-dining",
@@ -94,7 +104,8 @@
       "blurb": "Harbor dining is part of Port Jeff’s welcome — tables facing the same water the ferry crosses.",
       "facts": [
         "Waterfront restaurants and inns cluster along the Broadway harbor edge."
-      ]
+      ],
+      "puzzleSlot": 6
     },
     {
       "id": "drowned-meadow",
@@ -106,7 +117,8 @@
       "blurb": "Drowned Meadow Cottage remembers an earlier landscape before the modern downtown filled the meadow.",
       "facts": [
         "A compact museum stop that deepens the village story beyond the postcard harbor."
-      ]
+      ],
+      "puzzleSlot": 7
     },
     {
       "id": "harbor-overlook",
@@ -118,7 +130,21 @@
       "blurb": "From the overlook, Long Island Sound opens — the path the ferry still takes to Connecticut.",
       "facts": [
         "Sightlines across the harbor reconnect park, shipyard memory, and the ferry route."
-      ]
+      ],
+      "puzzleSlot": 8
     }
-  ]
+  ],
+  "movement": {
+    "virtualSpeedMps": 4.5,
+    "gpsLerpSeconds": 0.3,
+    "buildingCollision": false,
+    "waterCollision": true,
+    "spawnCheckpointId": "ferry-terminal"
+  },
+  "wayfinding": {
+    "worldLabels": true,
+    "nextNearestChip": true,
+    "compassArrow": true,
+    "collectionOrder": "free"
+  }
 }

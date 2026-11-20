@@ -27,6 +27,8 @@ Execute in order. Each task is completable in one sitting where possible.
 | 1.4 | Avatar + joystick + keyboard | Move freely in bbox |
 | 1.5 | Camera follow + oblique toggle | Preference persists |
 | 1.6 | Checkpoint markers + radius check | Button enables in range |
+| 1.6b | Wayfinding: labels + Next chip + compass | Virtual player can find all 9 without minimap |
+| 1.6c | Tutorial coach marks (once) | `tutorialDone` in save |
 | 1.7 | Check-in sheet + grant piece | Save updates |
 | 1.8 | Puzzle 3×3 page | Fills with progress |
 | 1.9 | Home / Settings / Reset | Round-trip works |
@@ -53,6 +55,7 @@ Execute in order. Each task is completable in one sitting where possible.
 |----|------|-----------|
 | 3.1 | Perf pass (merge mesh, DPR cap, bbox trim) | Mid phone OK |
 | 3.2 | Water collision / soft bounds | Hard to leave map |
+| 3.2b | WebGL failure → 2D list fallback | Completable without 3D |
 | 3.3 | QA checklist all green | File checked |
 | 3.4 | Pages deploy live | Public URL |
 | 3.5 | README runbook | Clone → play instructions |
