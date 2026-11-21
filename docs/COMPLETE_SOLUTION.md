@@ -26,17 +26,12 @@ Related docs (detail packs):
 | [DEPLOYMENT.md](./DEPLOYMENT.md) | Repo, Pages, PWA |
 | [QA_CHECKLIST.md](./QA_CHECKLIST.md) | Acceptance tests |
 | [ASSET_PIPELINE.md](./ASSET_PIPELINE.md) | **Find & license all materials** (OSM, ferry art, icons) |
-| [GAP_ANALYSIS.md](./GAP_ANALYSIS.md) | Engineer review — remaining gaps & locked fixes |
 | [ACCEPTANCE.md](./ACCEPTANCE.md) | **Delivery gate** — when MVP is done |
-| [BUILD_READY.md](./BUILD_READY.md) | Verdict: pack is build-ready |
 | [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md) | Exact algorithms & APIs |
 | [COPY_DECK.md](./COPY_DECK.md) | Every English UI string |
 | [BRAND_TOKENS.md](./BRAND_TOKENS.md) | Colors, type, motion |
-| [SCAFFOLD.md](./SCAFFOLD.md) | package.json, file tree, Vite/PWA |
-| [CLEANUP_SBU.md](./CLEANUP_SBU.md) | What to delete before scaffolding |
 | [CREDITS.md](./CREDITS.md) | Attribution log |
 | [`../data/checkpoints.template.json`](../data/checkpoints.template.json) | Machine-readable seeds |
-| [`../reference/`](../reference/) | Drop-in domain + copy + tokens |
 
 ---
 
@@ -89,7 +84,7 @@ Visitors and students need a **simple, playable way** to walk Port Jefferson’s
 | WebGL fail | Fallback 2D site list — still completable |
 | Privacy | Location on-device only; no accounts; Settings blurb |
 
-Full gap list: [GAP_ANALYSIS.md](./GAP_ANALYSIS.md).
+Exact numbers and algorithms: [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md).
 
 ---
 
@@ -305,17 +300,14 @@ Indoor third-person, camera photo matching, jump worlds, multiplayer, paid Googl
 - [x] Geo / white-box pipeline  
 - [x] UI flows + tutorial + fallback  
 - [x] Full site copy + UI copy deck  
-- [x] Module contracts + reference TypeScript  
+- [x] Module contracts  
 - [x] Acceptance / delivery gate  
 - [x] Brand tokens  
-- [x] Scaffold / deps / PWA manifest spec  
 - [x] Phased delivery + task breakdown  
 - [x] Deploy & QA  
 - [x] Credits / licensing notes  
 - [x] Non-goals  
 - [x] Asset acquisition pipeline  
-- [x] **Build artifacts on disk:** buildings GeoJSON, water collider, ferry JPG, icons  
-- [x] Engineer gap analysis + playability locks  
+- [x] **Implemented:** v0.1.0 app in `src/`, deployed via GitHub Pages  
 
-**Verdict:** Spec + required assets are **build-ready** — see [BUILD_READY.md](./BUILD_READY.md).  
-**Still to execute:** create `pj-go` remote, wipe SBU leftovers, scaffold app, implement, deploy Pages, pass [ACCEPTANCE.md](./ACCEPTANCE.md).
+Implementation status against the gate: [ACCEPTANCE.md](./ACCEPTANCE.md) §7.

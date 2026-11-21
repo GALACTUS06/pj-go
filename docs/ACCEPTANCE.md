@@ -82,3 +82,31 @@ Live GPS is optional and must not block any of the above.
 | Reviewer (optional) | Blind Virtual clear under 20 minutes |
 
 Tag: `v0.1.0` after sign-off.
+
+---
+
+## 7. Implementation status (v0.1.0)
+
+Verified in a phone-sized browser against the local dev and production builds:
+
+| ID | Status | Evidence |
+|----|--------|----------|
+| A1 | ✅ | All 9 sites checked in, puzzle assembled, finale shown |
+| A2 | ✅ | Save in `localStorage` key `pj-go-save-v1` survives reload |
+| A3 | ✅ | Reset empties check-ins, pieces, tutorial flag |
+| A4 | ✅ | GPS denied/unavailable → toast + switch to Virtual (code path); Virtual unaffected |
+| A5 | ✅ (desktop) | Live fix moved the walker, showed accuracy chip and outside-box banner; on-site field test still open |
+| A6 | ✅ | Follow ↔ Overview toggle; preference persisted |
+| A7 | ✅ | All strings from `src/copy/en.ts` |
+| A8 | ✅ | No Google APIs in code or network |
+| A9 | ✅ | Home footer + Settings credits |
+| A10 | ✅ | Next chip + rotating arrow + Sites list with Go beacon |
+| A11 | ✅ | 3-step coach, Skip/Got it persist `tutorialDone` |
+| A12 | ✅ | `#/play?fallback=1` and no-WebGL path render the site list; check-in works |
+| A13 | ✅ | Unit test: walking north from the ferry stops at the coastline |
+| A14 | ✅ | Banner shown, check-in disabled outside bbox |
+| A15 | ✅ | Production preview loads every asset under `/pj-go/` |
+| A16 | ✅ | Manifest + 192/512 icons + SW registered; `clear-cache.html` shipped |
+| C1–C4 | ✅ | Data tests enforce copy; finale + credits present |
+
+Open (non-blocking): on-site Live walk of ≥3 sites; real mid-range phone FPS check.

@@ -235,6 +235,6 @@ Contracts: [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md).
 
 - Final restaurant checkpoint display name after local preference (zone name **Waterfront Dining** ships).
 - Whether minimap ships in phase 2+ (default: **not MVP**).
-- Tune hand-authored water polygon after first Virtual playtest.
+- On-foot survey of the nine pins (ferry terminal and dining were moved inland of the OSM coastline).
 
-Ferry art, icons, GeoJSON, copy deck, acceptance, and module contracts are **closed** — see [BUILD_READY.md](./BUILD_READY.md).
+Ferry art, icons, GeoJSON, copy deck, acceptance, and module contracts are **closed**; v0.1.0 is implemented — see [ACCEPTANCE.md](./ACCEPTANCE.md) §7.

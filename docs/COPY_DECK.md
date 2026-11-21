@@ -32,9 +32,9 @@ Implement as `src/copy/en.ts` (or inline constants). Do not invent alternate wor
 | Key | String |
 |-----|--------|
 | `play.pieces` | Pieces {n}/9 |
-| `play.cameraFollow` | Camera: Follow |
-| `play.cameraOblique` | Camera: Overview |
-| `play.exit` | Exit |
+| `play.cameraFollow` | Follow |
+| `play.cameraOblique` | Overview |
+| `play.exit` | Exit (shown as ✕ in the Play HUD, label kept for screen readers) |
 | `play.checkIn` | Check in |
 | `play.near` | Near: {siteName} |
 | `play.next` | Next: {siteName} · {meters} m |

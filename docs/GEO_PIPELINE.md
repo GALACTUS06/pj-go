@@ -53,9 +53,11 @@ Convert OSM JSON → GeoJSON (e.g. `osmtogeojson` CLI or script).
 - `public/geo/port-jefferson-buildings.geojson`
 - `public/geo/port-jefferson-water.geojson`
 
-**Script:** `node scripts/fetch-osm.mjs` (sends a proper User-Agent).
+**Scripts:** `node scripts/fetch-osm.mjs [buildings|roads]` (proper User-Agent, mirror fallback, retries).
 
-**Water note:** OSM water tags inside this bbox are often sparse. MVP ships a **hand-authored harbor basin** collider in `port-jefferson-water.geojson` for reliable Virtual blocking. Re-merge OSM water when a fuller extract is available.
+**Water:** the harbor is mapped as `natural=coastline`, not water polygons. `python scripts/build-water.py` chains the coastline ways crossing the bbox and closes them along the north-west corner (coastline keeps land on its left, so the harbor lies north-west here). Unit tests assert every checkpoint is on land.
+
+**Streets** (`port-jefferson-roads.geojson`) are an optional orientation layer rendered as flat ribbons; the scene runs without the file.
 
 **Buildings:** ways-first converter is enough for white-box; ≥20 footprints required (current extract ≫20).
 

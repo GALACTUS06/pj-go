@@ -9,7 +9,8 @@ Keep this file in sync with every external file under `public/`.
 | Asset | Credit | License | Path |
 |-------|--------|---------|------|
 | Building footprints | © OpenStreetMap contributors | [ODbL](https://www.openstreetmap.org/copyright) | `public/geo/port-jefferson-buildings.geojson` |
-| Playable water collider | Hand-authored for MVP (harbor basin approx.) | Original for game use; OSM still credited in UI for map stack | `public/geo/port-jefferson-water.geojson` |
+| Harbor water | Derived from OSM `natural=coastline` (`scripts/build-water.py`) | ODbL | `public/geo/port-jefferson-water.geojson` |
+| Streets (optional) | © OpenStreetMap contributors | ODbL | `public/geo/port-jefferson-roads.geojson` |
 
 **On-screen:** Home footer + Settings — `Map data © OpenStreetMap`
 
@@ -37,7 +38,7 @@ Keep this file in sync with every external file under `public/`.
 
 | Asset | Credit | License |
 |-------|--------|---------|
-| `public/favicon.svg`, `public/icons/icon.svg` | Original PJ Go mark (ferry silhouette + PJ) | Original |
+| `public/favicon.svg`, `public/icons/icon.svg`, `icon-192.png`, `icon-512.png` | Original PJ Go mark (ferry silhouette + PJ) | Original |
 
 Not affiliated with Bridgeport & Port Jefferson Steamboat Company trademarks.
 

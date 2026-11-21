@@ -40,8 +40,7 @@ Until Phase 0 spike says otherwise:
 
 ## 4. Module layout (target)
 
-Full tree + deps: [SCAFFOLD.md](./SCAFFOLD.md).  
-Drop-in algorithms: [`../reference/domain/`](../reference/domain/).
+Algorithms: [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md), implemented in `src/domain/`.
 
 ```text
 src/
@@ -61,7 +60,9 @@ public/
   icons/
 ```
 
-**Phase 0 spike default (locked unless spike fails):** Three.js + R3F.
+**Decision (v0.1.0):** Three.js + React Three Fiber. Buildings are extruded at load time from GeoJSON and merged into one mesh plus one edge-line mesh; water and streets are flat merged meshes. Routing uses `HashRouter` so GitHub Pages never 404s on refresh.
+
+**Camera / controls as built:** both cameras orbit at a player-controlled yaw (drag the view or Q/E); the stick is camera-relative. Follow sits 8 m back / 5 m up; Overview sits 40 m back / 95 m up. Building collision is off, so the avatar carries a depth-test-free pin that stays visible through rooftops.
 
 ## 5. Input
 

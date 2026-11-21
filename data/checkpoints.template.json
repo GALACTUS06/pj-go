@@ -15,8 +15,8 @@
     {
       "id": "ferry-terminal",
       "name": "Ferry Terminal",
-      "lat": 40.94736,
-      "lng": -73.06979,
+      "lat": 40.9471,
+      "lng": -73.0696,
       "radiusM": 50,
       "priority": true,
       "blurb": "The Bridgeport & Port Jefferson ferry terminal is the village’s living bridge across Long Island Sound — scheduled boats still tie New York’s north shore to Connecticut.",
@@ -106,8 +106,8 @@
     {
       "id": "harbourfront-dining",
       "name": "Waterfront Dining",
-      "lat": 40.9482,
-      "lng": -73.0672,
+      "lat": 40.9477,
+      "lng": -73.0686,
       "radiusM": 40,
       "priority": false,
       "blurb": "Harbor dining is part of Port Jeff’s welcome — tables facing the same water the ferry crosses.",

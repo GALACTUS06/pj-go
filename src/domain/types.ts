@@ -8,7 +8,8 @@ export type Checkpoint = {
   blurb: string
   facts: string[]
   sources?: string[]
-  puzzleSlot: number // 0..8 row-major
+  /** 0..8, row-major on the 3×3 board */
+  puzzleSlot: number
 }
 
 export type Finale = {
@@ -26,21 +27,13 @@ export type MovementConfig = {
   spawnCheckpointId: string
 }
 
-export type WayfindingConfig = {
-  worldLabels: boolean
-  nextNearestChip: boolean
-  compassArrow: boolean
-  collectionOrder: 'free'
-}
-
 export type CheckpointsFile = {
   version: number
   origin: { lat: number; lng: number; note?: string }
   finale: Finale
   checkpoints: Checkpoint[]
   movement: MovementConfig
-  wayfinding: WayfindingConfig
-  playableBounds?: {
+  playableBounds: {
     south: number
     west: number
     north: number
@@ -49,9 +42,8 @@ export type CheckpointsFile = {
   }
 }
 
-export type AvatarState = {
-  x: number
-  z: number
-  yaw: number
-  source: 'virtual' | 'gps' | 'spawn'
-}
+/** Checkpoint with its position in local scene meters. */
+export type Site = Checkpoint & { x: number; z: number }
+
+export type PlayMode = 'virtual' | 'live'
+export type CameraMode = 'follow' | 'oblique'

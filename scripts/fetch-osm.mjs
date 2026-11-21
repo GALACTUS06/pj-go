@@ -1,114 +1,106 @@
 /**
- * Fetch Port Jefferson harbor buildings + water from Overpass → GeoJSON.
- * Usage: node scripts/fetch-osm.mjs
+ * Fetch Port Jefferson harbor buildings + streets from Overpass → GeoJSON.
+ * Water comes from the coastline: `python scripts/build-water.py`.
+ * Usage: node scripts/fetch-osm.mjs [buildings|roads]
  */
 import { writeFile, mkdir } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const root = join(__dirname, '..')
+const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = join(root, 'public', 'geo')
 
 const BBOX = '40.9445,-73.0740,40.9510,-73.0620' // S,W,N,E
-const OVERPASS = 'https://overpass-api.de/api/interpreter'
+const ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
+]
 
-const queries = {
-  buildings: `
-[out:json][timeout:90];
-(
-  way["building"](${BBOX});
-  relation["building"](${BBOX});
-);
-out body;
->;
-out skel qt;
-`,
-  water: `
-[out:json][timeout:90];
-(
-  way["natural"="water"](${BBOX});
-  relation["natural"="water"](${BBOX});
-  way["waterway"="riverbank"](${BBOX});
-  relation["waterway"="riverbank"](${BBOX});
-  way["natural"="bay"](${BBOX});
-  relation["natural"="bay"](${BBOX});
-  way["water"](${BBOX});
-  relation["water"](${BBOX});
-  way["harbour"](${BBOX});
-  way["seamark:type"="harbour"](${BBOX});
-);
-out body;
->;
-out skel qt;
-`,
+const LAYERS = {
+  buildings: {
+    query: `[out:json][timeout:90];
+(way["building"](${BBOX}););
+out body; >; out skel qt;`,
+    closed: true,
+    keep: ['building', 'name', 'height', 'building:levels'],
+  },
+  roads: {
+    query: `[out:json][timeout:90];
+(way["highway"~"^(primary|secondary|tertiary|residential|unclassified|service|pedestrian|footway|path|steps|living_street)$"](${BBOX}););
+out body; >; out skel qt;`,
+    closed: false,
+    keep: ['highway', 'name'],
+  },
 }
 
-function osmToGeoJSON(osm) {
+function toGeoJSON(osm, { closed, keep }) {
   const nodes = new Map()
-  for (const el of osm.elements || []) {
-    if (el.type === 'node') nodes.set(el.id, [el.lon, el.lat])
+  for (const el of osm.elements ?? []) {
+    if (el.type === 'node') nodes.set(el.id, [+el.lon.toFixed(6), +el.lat.toFixed(6)])
   }
-
   const features = []
-  for (const el of osm.elements || []) {
+  for (const el of osm.elements ?? []) {
     if (el.type !== 'way' || !el.nodes?.length) continue
-    const ring = el.nodes.map((id) => nodes.get(id)).filter(Boolean)
-    if (ring.length < 3) continue
-    if (
-      ring[0][0] !== ring[ring.length - 1][0] ||
-      ring[0][1] !== ring[ring.length - 1][1]
-    ) {
-      ring.push(ring[0])
+    const pts = el.nodes.map((id) => nodes.get(id)).filter(Boolean)
+    if (pts.length < (closed ? 3 : 2)) continue
+    if (closed) {
+      const [a, b] = [pts[0], pts[pts.length - 1]]
+      if (a[0] !== b[0] || a[1] !== b[1]) pts.push(a)
     }
     features.push({
       type: 'Feature',
       properties: {
         id: el.id,
-        ...Object.fromEntries(
-          Object.entries(el.tags || {}).filter(([k]) =>
-            ['building', 'name', 'height', 'building:levels', 'natural', 'waterway', 'water'].includes(k),
-          ),
-        ),
+        ...Object.fromEntries(Object.entries(el.tags ?? {}).filter(([k]) => keep.includes(k))),
       },
-      geometry: { type: 'Polygon', coordinates: [ring] },
+      geometry: closed
+        ? { type: 'Polygon', coordinates: [pts] }
+        : { type: 'LineString', coordinates: pts },
     })
   }
-
   return {
     type: 'FeatureCollection',
+    properties: { source: 'OpenStreetMap via Overpass (ODbL)', bbox: BBOX },
     features,
-    properties: {
-      source: 'OpenStreetMap via Overpass',
-      bbox: BBOX,
-      generatedAt: new Date().toISOString(),
-    },
   }
 }
 
 async function fetchOsm(query) {
-  const res = await fetch(OVERPASS, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': 'PJ-Go/0.1 (local build; harbor white-box extract)',
-      Accept: 'application/json',
-    },
-    body: `data=${encodeURIComponent(query)}`,
-  })
-  if (!res.ok) throw new Error(`Overpass ${res.status}: ${await res.text()}`)
-  return res.json()
+  let last
+  for (let attempt = 0; attempt < 3; attempt++) {
+    for (const url of ENDPOINTS) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'PJ-Go/0.1 (harbor white-box extract)',
+            Accept: 'application/json',
+          },
+          body: `data=${encodeURIComponent(query)}`,
+          signal: AbortSignal.timeout(120_000),
+        })
+        if (res.ok) return await res.json()
+        last = new Error(`${url} ${res.status}`)
+      } catch (e) {
+        last = e
+      }
+      console.warn(String(last))
+    }
+    await new Promise((r) => setTimeout(r, 5000 * (attempt + 1)))
+  }
+  throw last
 }
 
 await mkdir(outDir, { recursive: true })
-
-for (const [name, query] of Object.entries(queries)) {
+const only = process.argv[2]
+for (const [name, layer] of Object.entries(LAYERS)) {
+  if (only && only !== name) continue
   process.stdout.write(`Fetching ${name}… `)
-  const osm = await fetchOsm(query)
-  const gj = osmToGeoJSON(osm)
+  const gj = toGeoJSON(await fetchOsm(layer.query), layer)
   const path = join(outDir, `port-jefferson-${name}.geojson`)
   await writeFile(path, JSON.stringify(gj))
   console.log(`${gj.features.length} features → ${path}`)
 }
-
 console.log('Done. © OpenStreetMap contributors (ODbL).')

@@ -1,7 +1,7 @@
 # PJ Go — Module Contracts (Implement Exactly)
 
 Algorithms and APIs an engineer must implement so Virtual/Live share one truth.  
-Reference TypeScript lives in [`../reference/domain/`](../reference/domain/).
+Implemented in `src/domain/` and covered by `src/domain/domain.test.ts`.
 
 ---
 

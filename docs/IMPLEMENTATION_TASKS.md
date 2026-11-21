@@ -8,11 +8,10 @@ Execute in order. Each task is completable in one sitting where possible.
 
 | ID | Task | Done when |
 |----|------|-----------|
-| 0.0 | Wipe Stony Brook leftover app code; keep docs/data/reference/public geo+finale+icons/scripts | Clean tree for pj-go |
+| 0.0 | Wipe Stony Brook leftover app code; keep docs/data/public geo+finale+icons/scripts | Clean tree for pj-go |
 | 0.1 | Create GitHub repo `pj-go` (public or private) | Remote empty repo exists |
 | 0.2 | Push this docs + assets tree as initial commit | Docs visible on GitHub |
-| 0.3 | Scaffold Vite React TS + Router + Zustand + PWA per SCAFFOLD | `npm run dev` shows blank shell |
-| 0.3b | Copy `reference/domain|copy|styles` → `src/` | Imports resolve |
+| 0.3 | Scaffold Vite React TS + Router + Zustand + PWA | `npm run dev` shows blank shell |
 | 0.4 | Configure `base: '/pj-go/'` + Pages workflow stub | Workflow file present |
 | 0.5 | Geo spike: load committed GeoJSON → extrude → WASD avatar | Spike note in ARCHITECTURE |
 | 0.6 | Confirm Three/R3F (default locked) or document MapLibre switch | One sentence in ARCHITECTURE |
