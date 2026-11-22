@@ -29,6 +29,7 @@ export function UnlockReveal({ site, onClose }: { site: Site; onClose: () => voi
         <h2 id="unlock-title">{site.name}</h2>
 
         <div className="unlock-board" aria-label={en.unlock.board}>
+          <img className="board-ghost" src={ASSETS.finale} alt="" aria-hidden />
           {slots.map((s) => {
             const on = collected.includes(s.id)
             return (

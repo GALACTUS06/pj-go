@@ -26,6 +26,7 @@ Keep this file in sync with every external file under `public/`.
 | License | **CC BY-SA 3.0** |
 | Source | https://commons.wikimedia.org/wiki/File:Port_Jefferson_ferry.JPG |
 | Retrieved | 2026-11-20 (via images.weserv.nl resize proxy) |
+| Adaptation | Cropped to the ferry, stacks and shoreline (1225×919) so every puzzle piece shows part of the scene |
 | Share-alike note | Adapted puzzle crops of this image remain under CC BY-SA 3.0; credit this entry. |
 
 **On-screen Settings credits line:**

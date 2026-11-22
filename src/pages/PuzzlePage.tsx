@@ -23,6 +23,7 @@ export function PuzzlePage() {
       <p className="muted">{en.puzzle.hint}</p>
 
       <div className={`puzzle-grid${complete ? ' is-complete' : ''}`}>
+        <img className="board-ghost" src={ASSETS.finale} alt="" aria-hidden />
         {slots.map((s) => {
           const on = collected.includes(s.id)
           const col = s.puzzleSlot % 3
