@@ -5,6 +5,7 @@ import { SITES, TOTAL_PIECES } from '../data/checkpoints'
 import { photoFor } from '../data/sitePhotos'
 import type { Site } from '../domain/types'
 import { useGame } from '../state/useGameStore'
+import { SitePhotoFigure } from './SitePhotoFigure'
 
 /** Celebration shown right after a check-in: the site's photo and the new puzzle piece. */
 export function UnlockReveal({ site, onClose }: { site: Site; onClose: () => void }) {
@@ -24,12 +25,7 @@ export function UnlockReveal({ site, onClose }: { site: Site; onClose: () => voi
         onClick={(e) => e.stopPropagation()}
       >
         <p className="unlock-kicker">{en.unlock.kicker(collected.length, TOTAL_PIECES)}</p>
-        {photo && (
-          <figure className="unlock-photo">
-            <img src={photo.url} alt={photo.caption} />
-            <figcaption>{photo.caption}</figcaption>
-          </figure>
-        )}
+        {photo && <SitePhotoFigure photo={photo} className="unlock-photo" />}
         <h2 id="unlock-title">{site.name}</h2>
 
         <div className="unlock-board" aria-label={en.unlock.board}>

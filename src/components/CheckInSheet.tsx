@@ -5,6 +5,7 @@ import { TOTAL_PIECES } from '../data/checkpoints'
 import { photoFor } from '../data/sitePhotos'
 import type { Site } from '../domain/types'
 import { useGame } from '../state/useGameStore'
+import { SitePhotoFigure } from './SitePhotoFigure'
 import { UnlockReveal } from './UnlockReveal'
 
 export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => void }) {
@@ -32,12 +33,7 @@ export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => voi
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sheet-handle" />
-        {photo && (
-          <figure className="sheet-photo">
-            <img src={photo.url} alt={photo.caption} />
-            <figcaption>{photo.caption}</figcaption>
-          </figure>
-        )}
+        {photo && <SitePhotoFigure photo={photo} className="sheet-photo" />}
         <p className="sheet-kicker">{site.priority ? 'Landmark' : 'Harbor stop'} · Piece {site.puzzleSlot + 1}</p>
         <h2 id="sheet-title">{site.name}</h2>
         <p className="sheet-blurb">{site.blurb}</p>
