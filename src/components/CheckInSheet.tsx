@@ -1,21 +1,25 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { en } from '../copy/en'
 import { TOTAL_PIECES } from '../data/checkpoints'
+import { photoFor } from '../data/sitePhotos'
 import type { Site } from '../domain/types'
 import { useGame } from '../state/useGameStore'
-import { showToast } from './Toast'
+import { UnlockReveal } from './UnlockReveal'
 
 export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => void }) {
   const navigate = useNavigate()
   const collectedIds = useGame((s) => s.checkedInSiteIds)
   const checkIn = useGame((s) => s.checkIn)
+  const [revealed, setRevealed] = useState(false)
   const collected = collectedIds.includes(site.id)
   const complete = collectedIds.length >= TOTAL_PIECES
+  const photo = collected ? photoFor(site.id) : null
+
+  if (revealed) return <UnlockReveal site={site} onClose={onClose} />
 
   const collect = () => {
-    if (checkIn(site.id)) {
-      showToast(en.toast.piece(useGame.getState().checkedInSiteIds.length, TOTAL_PIECES))
-    }
+    if (checkIn(site.id)) setRevealed(true)
   }
 
   return (
@@ -28,6 +32,12 @@ export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => voi
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sheet-handle" />
+        {photo && (
+          <figure className="sheet-photo">
+            <img src={photo.url} alt={photo.caption} />
+            <figcaption>{photo.caption}</figcaption>
+          </figure>
+        )}
         <p className="sheet-kicker">{site.priority ? 'Landmark' : 'Harbor stop'} · Piece {site.puzzleSlot + 1}</p>
         <h2 id="sheet-title">{site.name}</h2>
         <p className="sheet-blurb">{site.blurb}</p>
@@ -46,6 +56,13 @@ export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => voi
             ))}
           </p>
         ) : null}
+        {photo && (
+          <p className="sheet-sources">
+            <a href={photo.source} target="_blank" rel="noreferrer">
+              {photo.credit}
+            </a>
+          </p>
+        )}
         <div className="sheet-actions">
           {collected ? (
             complete ? (

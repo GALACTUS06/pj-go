@@ -149,7 +149,7 @@
   "movement": {
     "virtualSpeedMps": 4.5,
     "gpsLerpSeconds": 0.3,
-    "buildingCollision": false,
+    "buildingCollision": true,
     "waterCollision": true,
     "spawnCheckpointId": "ferry-terminal"
   },

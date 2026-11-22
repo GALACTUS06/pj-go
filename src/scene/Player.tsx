@@ -1,30 +1,51 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
+import { showToast } from '../components/Toast'
+import { en } from '../copy/en'
 import { MOVEMENT, SITES, siteById } from '../data/checkpoints'
 import { siteInRange, nearestSite } from '../domain/checkIn'
+import { moveWithObstacles, type Obstacle } from '../domain/collision'
 import { clampToPlayable, distM } from '../domain/geo'
-import { moveWithWater, type Ring } from '../domain/water'
+import { findRoute, pointAlong, progressAlong, type RoadGraph } from '../domain/route'
 import type { CameraMode, PlayMode } from '../domain/types'
 import { useGame } from '../state/useGameStore'
-import { gps, input, player, useHud } from '../state/runtime'
+import { gps, input, nav, player, setAutoWalk, useHud } from '../state/runtime'
 
 const TURN_SPEED = 1.8 // rad/s for Q/E
 const NEAR_LABEL_M = 60
+/** Auto-walk steers toward a point this far ahead on the route. */
+const AUTO_LOOKAHEAD_M = 2.5
+/** Auto-walk gives up after this long without progress. */
+const AUTO_STUCK_S = 1.5
+/** The Next arrow points at the route this far ahead, so it turns at corners. */
+const ARROW_LOOKAHEAD_M = 10
+/** Re-plan once the walker has moved this far from the route's start. */
+const REPLAN_MOVE_M = 1.5
 
 /** Camera forward on the ground plane for yaw θ (θ=0 → north / −Z). */
 export const forwardOf = (yaw: number) => ({ x: -Math.sin(yaw), z: -Math.cos(yaw) })
 const rightOf = (yaw: number) => ({ x: Math.cos(yaw), z: -Math.sin(yaw) })
 
-/** Moves the player from stick/keyboard (Virtual) or GPS (Live). */
-export function Controller({ mode, waterRings }: { mode: PlayMode; waterRings: Ring[] }) {
+const wrapAngle = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
+
+/** Moves the player from stick/keyboard or auto-walk (Virtual) or GPS (Live). */
+export function Controller({ mode, walls }: { mode: PlayMode; walls: Obstacle[] }) {
+  const stuck = useRef(0)
   useFrame((_, delta) => {
     const dt = Math.min(delta, 0.05)
     input.camYaw += input.keyTurn * TURN_SPEED * dt
 
     const px = player.x
     const pz = player.z
+    const step = (dx: number, dz: number) => {
+      const next = moveWithObstacles(player.x, player.z, dx, dz, walls)
+      const c = clampToPlayable(next.x, next.z)
+      player.x = c.x
+      player.z = c.z
+    }
     if (mode === 'live') {
+      if (nav.auto) setAutoWalk(false)
       if (gps.target) {
         const t = clampToPlayable(gps.target.x, gps.target.z)
         const k = 1 - Math.exp(-dt / MOVEMENT.gpsLerpSeconds)
@@ -40,17 +61,31 @@ export function Controller({ mode, waterRings }: { mode: PlayMode; waterRings: R
         iy /= mag
       }
       if (mag > 0) {
+        if (nav.auto) setAutoWalk(false)
         const f = forwardOf(input.camYaw)
         const r = rightOf(input.camYaw)
         const s = MOVEMENT.virtualSpeedMps * dt
-        const dx = (f.x * iy + r.x * ix) * s
-        const dz = (f.z * iy + r.z * ix) * s
-        const next = MOVEMENT.waterCollision
-          ? moveWithWater(player.x, player.z, dx, dz, waterRings)
-          : { x: player.x + dx, z: player.z + dz }
-        const c = clampToPlayable(next.x, next.z)
-        player.x = c.x
-        player.z = c.z
+        step((f.x * iy + r.x * ix) * s, (f.z * iy + r.z * ix) * s)
+      } else if (nav.auto && nav.route) {
+        const pts = nav.route.points
+        const aim = pointAlong(pts, progressAlong(pts, player) + AUTO_LOOKAHEAD_M)
+        const vx = aim.x - player.x
+        const vz = aim.z - player.z
+        const len = Math.hypot(vx, vz)
+        if (len > 0.05) {
+          const s = Math.min(len, MOVEMENT.virtualSpeedMps * dt)
+          step((vx / len) * s, (vz / len) * s)
+          const d = wrapAngle(Math.atan2(-vx, -vz) - input.camYaw)
+          input.camYaw += d * Math.min(1, dt * 2.5)
+        }
+      }
+    }
+    if (nav.auto) {
+      const progressed = Math.hypot(player.x - px, player.z - pz) > 0.005
+      stuck.current = progressed ? 0 : stuck.current + dt
+      if (stuck.current > AUTO_STUCK_S) {
+        stuck.current = 0
+        setAutoWalk(false)
       }
     }
     const moved = Math.hypot(player.x - px, player.z - pz)
@@ -146,8 +181,11 @@ export function CameraRig({ mode, reducedMotion }: { mode: CameraMode; reducedMo
   return null
 }
 
-/** Publishes throttled HUD values (in-range site, Next target, compass bearing). */
-export function HudUpdater({ mode }: { mode: PlayMode }) {
+/**
+ * Publishes throttled HUD values (in-range site, Next target, compass
+ * bearing) and keeps the street route to Next up to date.
+ */
+export function HudUpdater({ mode, graph, walls }: { mode: PlayMode; graph: RoadGraph; walls: Obstacle[] }) {
   const acc = useRef(0)
   useFrame((_, delta) => {
     acc.current += delta
@@ -170,30 +208,55 @@ export function HudUpdater({ mode }: { mode: PlayMode }) {
         ? beacon
         : (nearestSite(player.x, player.z, SITES, checkedInSiteIds)?.site ?? null)
 
+    const targetId = target?.id ?? null
+    const start = nav.route?.points[0]
+    if (
+      targetId !== nav.targetId ||
+      (target && (!start || distM(start.x, start.z, player.x, player.z) > REPLAN_MOVE_M))
+    ) {
+      nav.targetId = targetId
+      nav.route = target ? findRoute(graph, { x: player.x, z: player.z }, target, walls) : null
+      nav.version++
+    }
+
     let nextDist = 0
     let nextBearing = 0
     if (target) {
+      let aim: { x: number; z: number } = target
       nextDist = distM(player.x, player.z, target.x, target.z)
-      const vx = target.x - player.x
-      const vz = target.z - player.z
+      if (nav.route) {
+        const pts = nav.route.points
+        const along = progressAlong(pts, player)
+        nextDist = Math.max(0, nav.route.lengthM - along)
+        aim = pointAlong(pts, along + ARROW_LOOKAHEAD_M)
+      }
+      const vx = aim.x - player.x
+      const vz = aim.z - player.z
       const f = forwardOf(input.camYaw)
       const r = rightOf(input.camYaw)
       nextBearing = Math.atan2(vx * r.x + vz * r.z, vx * f.x + vz * f.z)
     }
 
+    if (nav.auto && (!target || (inRange && inRange.id === target.id))) {
+      setAutoWalk(false)
+      if (target) showToast(en.play.arrived(target.name))
+    }
+
     const patch = {
       inRangeId: inRange?.id ?? null,
       nearId: near && near.distanceM < NEAR_LABEL_M ? near.site.id : null,
-      nextId: target?.id ?? null,
+      nextId: targetId,
       nextDist: Math.round(nextDist),
       nextBearing: Math.round(nextBearing * 50) / 50,
+      hasRoute: nav.route != null,
     }
     if (
       patch.inRangeId !== hud.inRangeId ||
       patch.nearId !== hud.nearId ||
       patch.nextId !== hud.nextId ||
       patch.nextDist !== hud.nextDist ||
-      patch.nextBearing !== hud.nextBearing
+      patch.nextBearing !== hud.nextBearing ||
+      patch.hasRoute !== hud.hasRoute
     ) {
       useHud.setState(patch)
     }

@@ -62,7 +62,9 @@ public/
 
 **Decision (v0.1.0):** Three.js + React Three Fiber. Buildings are extruded at load time from GeoJSON and merged into one mesh plus one edge-line mesh; water and streets are flat merged meshes. Routing uses `HashRouter` so GitHub Pages never 404s on refresh.
 
-**Camera / controls as built:** both cameras orbit at a player-controlled yaw (drag the view or Q/E); the stick is camera-relative. Follow sits 8 m back / 5 m up; Overview sits 40 m back / 95 m up. Building collision is off, so the avatar carries a depth-test-free pin that stays visible through rooftops.
+**Camera / controls as built:** both cameras orbit at a player-controlled yaw (drag the view or Q/E); the stick is camera-relative. Follow sits 8 m back / 5 m up; Overview sits 40 m back / 95 m up. Buildings and water are solid for stick and auto-walk movement (Live GPS is never blocked; a walker left inside a footprint can walk out). In Overview the avatar carries a depth-test-free pin that stays visible behind rooftops.
+
+**Navigation as built:** OSM streets and footways become a graph (shared nodes join ways; segments crossing walls are dropped; the largest connected component is kept). Every 1.5 m of movement, or when Next changes, A* plans from the walker's nearest clear road point to the road point nearest the site that is on open ground. The scene draws it as a blue ribbon; the Next chip shows the remaining walking distance, and its arrow points 10 m ahead along the route so it turns at corners. **Walk route** steers the walker 2.5 m ahead along the route and turns the camera with it, stopping on arrival, when the stick is touched, or after 1.5 s without progress.
 
 ## 5. Input
 

@@ -93,6 +93,7 @@ export function SettingsPage() {
         <h2>{en.settings.credits}</h2>
         <p>{en.credits.osm}</p>
         <p>{en.credits.ferry}</p>
+        <p>{en.credits.sitePhotos}</p>
         <p>{en.credits.mark}</p>
       </section>
 

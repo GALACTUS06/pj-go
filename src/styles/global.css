@@ -647,6 +647,133 @@ a {
 .drawer h2 {
   font-size: 1.25rem;
 }
+.sheet-photo,
+.unlock-photo {
+  position: relative;
+  margin: 0 0 0.9rem;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--pj-mist);
+}
+.sheet-photo img,
+.unlock-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+.sheet-photo figcaption,
+.unlock-photo figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.4rem 0.8rem 0.5rem;
+  background: linear-gradient(transparent, rgba(6, 20, 31, 0.75));
+  color: var(--pj-white);
+  font-size: var(--pj-size-small);
+}
+
+/* ---------- Unlock reveal ---------- */
+
+.unlock-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(6, 20, 31, 0.7);
+  touch-action: auto;
+  animation: fade-in 0.25s ease-out;
+}
+.unlock {
+  width: 100%;
+  max-width: 26rem;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 1.1rem 1.1rem 0.9rem;
+  border-radius: 20px;
+  background: var(--pj-white);
+  box-shadow: 0 18px 50px rgba(6, 20, 31, 0.45);
+  animation: unlock-in 0.45s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+@keyframes unlock-in {
+  from {
+    transform: scale(0.8) translateY(30px);
+    opacity: 0;
+  }
+}
+.unlock-kicker {
+  margin: 0 0 0.7rem;
+  color: var(--pj-ferry-red);
+  font-size: 0.8rem;
+  font-weight: var(--pj-weight-bold);
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.unlock-photo img {
+  aspect-ratio: 4 / 3;
+  animation: photo-in 1.4s ease-out;
+}
+@keyframes photo-in {
+  from {
+    transform: scale(1.12);
+    filter: blur(6px) saturate(0.4);
+  }
+}
+.unlock h2 {
+  margin-bottom: 0.7rem;
+  font-size: 1.4rem;
+  text-align: center;
+}
+.unlock-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  width: 132px;
+  aspect-ratio: 4 / 3;
+  margin: 0 auto;
+  padding: 3px;
+  border-radius: 8px;
+  background: var(--pj-navy);
+}
+.unlock-cell {
+  border-radius: 3px;
+  background: #1c3550;
+  background-size: 300% 300%;
+}
+.unlock-cell.is-new {
+  animation: cell-pop 0.6s 0.35s ease-out both;
+  box-shadow: 0 0 0 2px var(--pj-marker);
+}
+@keyframes cell-pop {
+  from {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.25);
+  }
+}
+.unlock-credit {
+  margin: 0.6rem 0 0;
+  font-size: 0.7rem;
+  text-align: center;
+}
+.unlock-credit a {
+  color: #66788a;
+}
+
+.chip-walk {
+  background: #1a8cff;
+  color: var(--pj-white);
+}
+.chip-walk.is-on {
+  background: var(--pj-navy);
+}
 
 /* ---------- Tutorial ---------- */
 

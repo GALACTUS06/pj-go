@@ -39,19 +39,24 @@ export const en = {
     go: 'Go',
     collected: 'Collected',
     dragHint: 'Drag the view to turn',
+    autoWalk: 'Walk route',
+    stopWalk: 'Stop',
+    arrived: (siteName: string) => `Arrived at ${siteName} — tap Check in`,
   },
-  toast: {
-    piece: (n: number, total: number) => `Piece unlocked (${n}/${total})`,
+  unlock: {
+    kicker: (n: number, total: number) => `Piece ${n} of ${total} unlocked`,
+    board: 'Puzzle progress',
+    continue: 'Keep exploring',
   },
   tutorial: {
     steps: [
       { title: 'Move', body: 'Drag the stick to walk the harbor. Drag anywhere else to turn the view.' },
-      { title: 'Find a glow', body: 'Follow Next and its arrow, or walk to a glowing marker.' },
+      { title: 'Follow the blue line', body: 'It leads along the streets to the Next site. Tap Walk route to walk it automatically.' },
       { title: 'Check in', body: 'When close enough, tap Check in to collect a piece.' },
     ],
     liveSteps: [
       { title: 'Walk for real', body: 'Your phone’s GPS moves the walker as you walk the village.' },
-      { title: 'Find a glow', body: 'Follow Next and its arrow toward the nearest site.' },
+      { title: 'Follow the blue line', body: 'It leads along the streets to the Next site.' },
       { title: 'Check in', body: 'When close enough, tap Check in to collect a piece.' },
     ],
     next: 'Next',
@@ -105,7 +110,8 @@ export const en = {
     devHint: 'Long-press the build number to toggle.',
   },
   credits: {
-    osm: 'Buildings and coastline: © OpenStreetMap contributors (ODbL).',
+    osm: 'Buildings, streets and coastline: © OpenStreetMap contributors (ODbL).',
+    sitePhotos: 'Site photos: Wikimedia Commons contributors — see each photo for author and license.',
     ferry: 'Ferry photo: “Port Jefferson ferry” — Finavon / Wikimedia Commons, CC BY-SA 3.0.',
     mark: 'PJ Go mark: original. Not affiliated with the Bridgeport & Port Jefferson Steamboat Company.',
   },

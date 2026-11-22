@@ -1,0 +1,65 @@
+{
+  "ferry-terminal": {
+    "file": "sites/ferry-terminal.jpg",
+    "caption": "The harbor and ferry slip from above",
+    "author": "John Feinberg",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Port_Jefferson_x_DJI_Mavic_Pro.jpg"
+  },
+  "shipbuilders-memorial": {
+    "file": "sites/shipbuilders-memorial.jpg",
+    "caption": "Harborfront Park on the water",
+    "author": "Andre Carrotflower",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Harborfront_Park,_Port_Jefferson,_New_York_-_20221124.jpg"
+  },
+  "bayles-shipyard": {
+    "file": "sites/bayles-shipyard.jpg",
+    "caption": "The 1917 machine shop and mould loft",
+    "author": "Doug Kerr",
+    "license": "CC BY-SA 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Bayles_Shipyard_1917_Machine_Shop_and_Mould_Loft_Dec_07.jpg"
+  },
+  "village-center": {
+    "file": "sites/village-center.jpg",
+    "caption": "Village Center seen from the harbor",
+    "author": "Iracaz",
+    "license": "Public domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Port_Jefferson_Village_Center2.jpg"
+  },
+  "historical-society": {
+    "file": "sites/historical-society.jpg",
+    "caption": "East Main Street, the walk toward the Mather House",
+    "author": "Andre Carrotflower",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:East_Main_Street_decorated_for_the_holidays,_Port_Jefferson,_New_York_-_20221124.jpg"
+  },
+  "main-street": {
+    "file": "sites/main-street.jpg",
+    "caption": "Main Street seen from the harbor",
+    "author": "Wusel007",
+    "license": "CC BY-SA 3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Port_Jefferson_Main_Street_2010.jpg"
+  },
+  "harbourfront-dining": {
+    "file": "sites/harbourfront-dining.jpg",
+    "caption": "Harborfront inn and dining on the water",
+    "author": "Mike Peel",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:At_Long_Island_2023_072.jpg"
+  },
+  "drowned-meadow": {
+    "file": "sites/drowned-meadow.jpg",
+    "caption": "Village Hall on West Broadway, a few steps from the cottage",
+    "author": "Mike Peel",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:At_Long_Island_2023_096.jpg"
+  },
+  "harbor-overlook": {
+    "file": "sites/harbor-overlook.jpg",
+    "caption": "Across the harbor toward the Sound",
+    "author": "Andre Carrotflower",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Harbor_view,_Port_Jefferson,_New_York_-_20221124.jpg"
+  }
+}

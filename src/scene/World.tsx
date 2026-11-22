@@ -1,14 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
-import { ASSETS } from '../config/assets'
 import { playableRect } from '../domain/geo'
+import type { RoadFeature } from '../domain/route'
 import type { Ring } from '../domain/water'
-import {
-  buildBuildingsGeometry,
-  buildFlatGeometry,
-  buildRoadsGeometry,
-  type RoadFeature,
-} from './geometry'
+import { buildBuildingsGeometry, buildFlatGeometry, buildRoadsGeometry } from './geometry'
 import type { BuildingFeature } from './useHarborGeo'
 
 export function Ground() {
@@ -57,20 +52,8 @@ export function Water({ rings }: { rings: Ring[] }) {
   )
 }
 
-/** Streets are optional orientation aids; the scene works without them. */
-export function Roads() {
-  const [features, setFeatures] = useState<RoadFeature[] | null>(null)
-  useEffect(() => {
-    let alive = true
-    fetch(ASSETS.roads)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((fc) => alive && fc && setFeatures(fc.features))
-      .catch(() => {})
-    return () => {
-      alive = false
-    }
-  }, [])
-  const geom = useMemo(() => (features ? buildRoadsGeometry(features, 0.03) : null), [features])
+export function Roads({ features }: { features: RoadFeature[] }) {
+  const geom = useMemo(() => (features.length ? buildRoadsGeometry(features, 0.03) : null), [features])
   useEffect(() => () => geom?.dispose(), [geom])
   if (!geom) return null
   return (

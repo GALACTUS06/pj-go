@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ASSETS } from '../config/assets'
+import { MOVEMENT } from '../data/checkpoints'
+import { buildingObstacles, toObstacles, type Obstacle } from '../domain/collision'
+import { buildRoadGraph, type RoadFeature, type RoadGraph } from '../domain/route'
 import { ringsFromGeoJSON, type Ring } from '../domain/water'
 
 export type BuildingFeature = {
@@ -10,6 +13,10 @@ export type BuildingFeature = {
 export type HarborGeo = {
   buildings: { features: BuildingFeature[] }
   waterRings: Ring[]
+  roads: RoadFeature[]
+  /** Everything the walker cannot enter (water and, if enabled, buildings). */
+  walls: Obstacle[]
+  graph: RoadGraph
 }
 
 type State =
@@ -26,9 +33,24 @@ async function fetchJson(url: string) {
 }
 
 function loadGeo() {
-  cache ??= Promise.all([fetchJson(ASSETS.buildings), fetchJson(ASSETS.water)]).then(
-    ([buildings, water]) => ({ buildings, waterRings: ringsFromGeoJSON(water) }),
-  )
+  cache ??= Promise.all([
+    fetchJson(ASSETS.buildings),
+    fetchJson(ASSETS.water),
+    fetchJson(ASSETS.roads).catch(() => ({ features: [] })),
+  ]).then(([buildings, water, roads]) => {
+    const waterRings = ringsFromGeoJSON(water)
+    const walls = [
+      ...(MOVEMENT.waterCollision ? toObstacles(waterRings) : []),
+      ...(MOVEMENT.buildingCollision ? buildingObstacles(buildings) : []),
+    ]
+    return {
+      buildings,
+      waterRings,
+      roads: roads.features,
+      walls,
+      graph: buildRoadGraph(roads.features, walls),
+    }
+  })
   cache.catch(() => {
     cache = null
   })

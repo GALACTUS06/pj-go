@@ -1,12 +1,14 @@
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { MIN_BUILDING_AREA_M2 } from '../domain/collision'
 import { latLngToLocal } from '../domain/geo'
+import type { Pt, RoadFeature } from '../domain/route'
 import type { Ring } from '../domain/water'
 import type { BuildingFeature } from './useHarborGeo'
 
 const LEVEL_M = 3.2
 const DEFAULT_HEIGHT_M = 9
-const MIN_AREA_M2 = 15
+const MIN_AREA_M2 = MIN_BUILDING_AREA_M2
 
 /** Shapes live in XY; after rotateX(-90°) shape (x, -z) lands on world (x, ·, z). */
 const toShapePts = (ring: Ring) => ring.map((p) => new THREE.Vector2(p.x, -p.z))
@@ -67,36 +69,55 @@ const ROAD_WIDTH: Record<string, number> = {
   steps: 2,
 }
 
-export type RoadFeature = {
-  properties: { highway?: string }
-  geometry: { type: string; coordinates: number[][] }
-}
-
 /** Flat ribbons along each street centerline. */
 export function buildRoadsGeometry(features: RoadFeature[], y: number) {
   const pos: number[] = []
   for (const f of features) {
     if (f.geometry?.type !== 'LineString') continue
     const w = (ROAD_WIDTH[f.properties.highway ?? ''] ?? 4) / 2
-    const pts = project(f.geometry.coordinates)
-    for (let i = 0; i < pts.length - 1; i++) {
-      const a = pts[i]
-      const b = pts[i + 1]
-      const len = Math.hypot(b.x - a.x, b.z - a.z)
-      if (len < 0.01) continue
-      const nx = (-(b.z - a.z) / len) * w
-      const nz = ((b.x - a.x) / len) * w
-      const quad = [
-        [a.x + nx, a.z + nz],
-        [a.x - nx, a.z - nz],
-        [b.x - nx, b.z - nz],
-        [b.x + nx, b.z + nz],
-      ]
-      for (const k of [0, 2, 1, 0, 3, 2]) pos.push(quad[k][0], y, quad[k][1])
-    }
+    pushRibbon(pos, project(f.geometry.coordinates), w, y)
   }
   const g = new THREE.BufferGeometry()
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
   g.computeVertexNormals()
+  return g
+}
+
+/** Upward-facing quads of half-width `w` along a polyline. */
+function pushRibbon(pos: number[], pts: Pt[], w: number, y: number) {
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i]
+    const b = pts[i + 1]
+    const len = Math.hypot(b.x - a.x, b.z - a.z)
+    if (len < 0.01) continue
+    const nx = (-(b.z - a.z) / len) * w
+    const nz = ((b.x - a.x) / len) * w
+    const quad = [
+      [a.x + nx, a.z + nz],
+      [a.x - nx, a.z - nz],
+      [b.x - nx, b.z - nz],
+      [b.x + nx, b.z + nz],
+    ]
+    for (const k of [0, 2, 1, 0, 3, 2]) pos.push(quad[k][0], y, quad[k][1])
+  }
+}
+
+const JOINT_SEGMENTS = 10
+
+/** Navigation line: a ribbon with round joints so corners have no gaps. */
+export function buildRouteGeometry(pts: Pt[], halfWidth: number, y: number) {
+  const pos: number[] = []
+  pushRibbon(pos, pts, halfWidth, y)
+  for (const p of pts.slice(1)) {
+    for (let k = 0; k < JOINT_SEGMENTS; k++) {
+      const a0 = (k / JOINT_SEGMENTS) * Math.PI * 2
+      const a1 = ((k + 1) / JOINT_SEGMENTS) * Math.PI * 2
+      pos.push(p.x, y, p.z)
+      pos.push(p.x + Math.cos(a1) * halfWidth, y, p.z + Math.sin(a1) * halfWidth)
+      pos.push(p.x + Math.cos(a0) * halfWidth, y, p.z + Math.sin(a0) * halfWidth)
+    }
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
   return g
 }

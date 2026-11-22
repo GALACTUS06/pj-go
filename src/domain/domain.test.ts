@@ -2,15 +2,24 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import data from '../../data/checkpoints.template.json'
+import photos from '../../data/site-photos.json'
 import { canCheckIn, grantPiece, siteInRange } from './checkIn'
+import { blockedAt, buildingObstacles, moveWithObstacles, segmentBlocked, toObstacles } from './collision'
 import { GEO, distM, latLngToLocal, localToLatLng, pointInBBox } from './geo'
+import { buildRoadGraph, findRoute, pointAlong } from './route'
 import { migrateSave } from './save'
-import { inWater, moveWithWater, ringsFromGeoJSON } from './water'
+import { inWater, ringsFromGeoJSON } from './water'
 
-const water = ringsFromGeoJSON(
-  JSON.parse(readFileSync(join(__dirname, '../../public/geo/port-jefferson-water.geojson'), 'utf8')),
-)
+const geo = (name: string) =>
+  JSON.parse(readFileSync(join(__dirname, `../../public/geo/port-jefferson-${name}.geojson`), 'utf8'))
+const water = ringsFromGeoJSON(geo('water'))
+const waterObs = toObstacles(water)
+const buildings = buildingObstacles(geo('buildings'))
+const walls = [...waterObs, ...buildings]
+const graph = buildRoadGraph(geo('roads').features, walls)
 const sites = data.checkpoints.map((c) => ({ ...c, ...latLngToLocal(c.lat, c.lng) }))
+const ferry = sites.find((s) => s.id === 'ferry-terminal')!
+const spawn = { x: ferry.x, z: ferry.z + 14 }
 
 describe('projection', () => {
   it('maps the origin to ~(0,0)', () => {
@@ -109,14 +118,87 @@ describe('water', () => {
   it('blocks walking straight into the harbor', () => {
     const start = latLngToLocal(40.9471, -73.0696)
     let p = { ...start }
-    for (let i = 0; i < 400; i++) p = moveWithWater(p.x, p.z, 0, -1, water)
+    for (let i = 0; i < 400; i++) p = moveWithObstacles(p.x, p.z, 0, -1, waterObs)
     expect(inWater(p.x, p.z, water)).toBe(false)
   })
 
   it('lets a walker stranded in the water move out', () => {
     const wet = latLngToLocal(40.9500, -73.0720)
     expect(inWater(wet.x, wet.z, water)).toBe(true)
-    const p = moveWithWater(wet.x, wet.z, 1, 1, water)
+    const p = moveWithObstacles(wet.x, wet.z, 1, 1, waterObs)
     expect(p).toEqual({ x: wet.x + 1, z: wet.z + 1 })
+  })
+})
+
+describe('buildings', () => {
+  it('spawns outside every wall', () => {
+    expect(blockedAt(spawn.x, spawn.z, walls)).toBe(false)
+  })
+
+  it('stops a walker at the wall of a building', () => {
+    let tested = 0
+    for (const b of buildings.slice(0, 40)) {
+      const cx = (b.minX + b.maxX) / 2
+      const cz = (b.minZ + b.maxZ) / 2
+      if (!blockedAt(cx, cz, [b])) continue
+      let p = { x: cx, z: b.maxZ + 3 }
+      if (blockedAt(p.x, p.z, buildings)) continue
+      for (let i = 0; i < 200; i++) p = moveWithObstacles(p.x, p.z, 0, -0.1, buildings)
+      expect(blockedAt(p.x, p.z, buildings)).toBe(false)
+      tested++
+    }
+    expect(tested).toBeGreaterThan(10)
+  })
+})
+
+describe('navigation', () => {
+  it('keeps one connected street network', () => {
+    expect(graph.nodes.length).toBeGreaterThan(500)
+  })
+
+  it('routes from spawn to every site and ends inside its check-in radius on open ground', () => {
+    for (const s of sites) {
+      const r = findRoute(graph, spawn, s, walls)
+      expect(r, s.id).not.toBeNull()
+      const end = r!.points[r!.points.length - 1]
+      expect(distM(end.x, end.z, s.x, s.z), s.id).toBeLessThan(s.radiusM)
+      expect(blockedAt(end.x, end.z, walls), s.id).toBe(false)
+      expect(r!.lengthM, s.id).toBeGreaterThanOrEqual(distM(spawn.x, spawn.z, end.x, end.z) - 0.01)
+    }
+  })
+
+  it('routes between every pair of sites without cutting through walls', () => {
+    for (const a of sites) {
+      for (const b of sites) {
+        if (a === b) continue
+        const r = findRoute(graph, a, b, walls)
+        expect(r, `${a.id}→${b.id}`).not.toBeNull()
+        const pts = r!.points
+        for (let i = 2; i < pts.length; i++) {
+          expect(segmentBlocked(pts[i - 1].x, pts[i - 1].z, pts[i].x, pts[i].z, walls), `${a.id}→${b.id}`).toBe(false)
+        }
+      }
+    }
+  })
+
+  it('walks points along a polyline', () => {
+    const line = [
+      { x: 0, z: 0 },
+      { x: 10, z: 0 },
+      { x: 10, z: 10 },
+    ]
+    expect(pointAlong(line, 15)).toEqual({ x: 10, z: 5 })
+    expect(pointAlong(line, 99)).toEqual({ x: 10, z: 10 })
+  })
+})
+
+describe('site photos', () => {
+  it('has a credited photo file for every site', () => {
+    for (const s of sites) {
+      const p = (photos as Record<string, { file: string; author: string; license: string }>)[s.id]
+      expect(p, s.id).toBeDefined()
+      expect(p.author && p.license, s.id).toBeTruthy()
+      expect(() => readFileSync(join(__dirname, '../../public', p.file)), s.id).not.toThrow()
+    }
   })
 })

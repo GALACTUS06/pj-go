@@ -11,7 +11,7 @@ import { TOTAL_PIECES, siteById } from '../data/checkpoints'
 import { usePlayerLocation } from '../location/usePlayerLocation'
 import { PlayCanvas } from '../scene/PlayCanvas'
 import { useHarborGeo } from '../scene/useHarborGeo'
-import { input, useHud } from '../state/runtime'
+import { input, setAutoWalk, useHud } from '../state/runtime'
 import { useGame } from '../state/useGameStore'
 import { FallbackSitesPage } from './FallbackSitesPage'
 
@@ -82,6 +82,8 @@ export function PlayPage() {
 
   usePlayerLocation(mode === 'live')
 
+  useEffect(() => () => setAutoWalk(false), [])
+
   useEffect(() => {
     if (mode === 'live' && hud.gpsStatus === 'denied') {
       showToast(en.play.gpsDenied)
@@ -91,7 +93,9 @@ export function PlayPage() {
 
   const inRange = siteById(hud.inRangeId)
   const openCheckIn = () => {
-    if (inRange) setSheetId(inRange.id)
+    if (!inRange) return
+    setAutoWalk(false)
+    setSheetId(inRange.id)
   }
   useKeyboard(openCheckIn, toggleCamera)
 
@@ -183,6 +187,15 @@ export function PlayPage() {
       <footer className="hud-bottom">
         {mode === 'virtual' ? <Joystick /> : <span />}
         <div className="hud-action">
+          {mode === 'virtual' && next && !allDone && hud.hasRoute && hud.inRangeId !== next.id && (
+            <button
+              className={`chip chip-walk${hud.autoWalk ? ' is-on' : ''}`}
+              onClick={() => setAutoWalk(!hud.autoWalk)}
+              aria-pressed={hud.autoWalk}
+            >
+              {hud.autoWalk ? `■ ${en.play.stopWalk}` : `▶ ${en.play.autoWalk}`}
+            </button>
+          )}
           {near && <span className="chip">{en.play.near(near.name)}</span>}
           <button
             className="btn btn-primary btn-checkin"

@@ -145,7 +145,9 @@ Exact numbers and algorithms: [MODULE_CONTRACTS.md](./MODULE_CONTRACTS.md).
 | F14 | Virtual wayfinding: world labels + Next chip + compass |
 | F15 | One-time tutorial coach marks |
 | F16 | WebGL failure → 2D site list still completable |
-| F17 | Water collision on; building collision off |
+| F17 | Water and building collision on (walker slides along walls; Live GPS is never blocked) |
+| F18 | Street navigation: blue route line to Next along OSM streets, walking distance in the chip, optional **Walk route** auto-walk |
+| F19 | Unlock reveal: site photo (Wikimedia Commons, credited) + new puzzle piece on every check-in |
 
 ---
 

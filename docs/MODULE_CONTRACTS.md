@@ -99,7 +99,7 @@ Each frame:
 2. Propose `x' = x + vx*dt`, `z' = z + vz*dt`  
 3. If water collision on → reject or slide along edge (try X-only then Z-only)  
 4. Clamp to bbox ± `paddingM` (soft push-back)  
-5. Buildings: **no collision** in MVP  
+5. Buildings: **solid** in Virtual mode (`domain/collision.ts`, footprints ≥ 15 m²); routes from `domain/route.ts` follow OSM streets and skip segments that pass through walls  
 
 Yaw: face movement direction when speed &gt; 0.2 m/s.
 

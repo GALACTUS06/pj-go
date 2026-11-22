@@ -37,22 +37,3 @@ export function pointInRing(x: number, z: number, ring: Ring): boolean {
 export function inWater(x: number, z: number, rings: Ring[]) {
   return rings.some((r) => pointInRing(x, z, r))
 }
-
-/**
- * Try to move from (x,z) by (dx,dz); slide along the shore by trying each
- * axis alone when the full step would enter water. A walker already in the
- * water (e.g. left there by a GPS fix) moves freely so it can get out.
- */
-export function moveWithWater(
-  x: number,
-  z: number,
-  dx: number,
-  dz: number,
-  rings: Ring[],
-): { x: number; z: number } {
-  if (!rings.length || inWater(x, z, rings)) return { x: x + dx, z: z + dz }
-  if (!inWater(x + dx, z + dz, rings)) return { x: x + dx, z: z + dz }
-  if (dx !== 0 && !inWater(x + dx, z, rings)) return { x: x + dx, z }
-  if (dz !== 0 && !inWater(x, z + dz, rings)) return { x, z: z + dz }
-  return { x, z }
-}

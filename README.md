@@ -17,8 +17,8 @@ Walk a 3D white-box model of the harbor (built from OpenStreetMap), check in at 
 
 1. **Start Virtual Walk** on the home screen.
 2. Drag the stick to walk; drag anywhere else on the view to turn. On a keyboard: WASD / arrows to move, Q/E to turn, C to switch camera, Enter to check in.
-3. Follow the **Next** chip and its arrow to the nearest glowing marker. **Sites** lists all 9 — tap **Go** to point the arrow at one.
-4. Inside a marker's ring, tap **Check in**, read the story, and **Collect puzzle piece**.
+3. Follow the **blue line**: it routes along the streets to the **Next** site (the chip shows the walking distance). Tap **Walk route** to let the walker follow it on its own; touching the stick takes back control. **Sites** lists all 9 — tap **Go** to route to one.
+4. Buildings and the harbor are solid — walk around them. Inside a marker's ring, tap **Check in**, read the story, and **Collect puzzle piece** to unlock the site's photo and your new piece.
 5. With all 9 pieces, open **Puzzle** → **Reveal the ferry**.
 
 **Overview** camera lifts the view above the rooftops. Progress is saved in the browser; **Settings → Reset all progress** starts over.
@@ -43,6 +43,7 @@ Data refresh (optional):
 node scripts/fetch-osm.mjs          # buildings (+ streets) from Overpass
 python scripts/build-water.py       # harbor water from the OSM coastline
 npm run icons                       # rasterize public/icons/icon.svg
+python scripts/fetch-site-photos.py # unlock photos + credits from Wikimedia Commons
 ```
 
 Deploys to GitHub Pages on every push to `main` (`.github/workflows/deploy-pages.yml`).  
@@ -53,7 +54,8 @@ If a phone keeps showing an old build, open `/pj-go/clear-cache.html`.
 | Path | What |
 |------|------|
 | `data/checkpoints.template.json` | The 9 sites: coordinates, radius, copy, puzzle slot |
-| `src/domain/` | Projection, check-in, save, water collision (unit-tested) |
+| `data/site-photos.json` | Unlock photo per site with author, license, source |
+| `src/domain/` | Projection, check-in, save, wall/water collision, street routing (unit-tested) |
 | `src/scene/` | Three.js / R3F scene: buildings, water, avatar, markers, cameras |
 | `src/pages/` | Home, Play, Puzzle, Finale, Settings, 2D fallback |
 | `src/copy/en.ts` | Every UI string |
@@ -64,8 +66,9 @@ If a phone keeps showing an old build, open `/pj-go/clear-cache.html`.
 
 ## Credits
 
-- Buildings and coastline © OpenStreetMap contributors (ODbL)
+- Buildings, streets and coastline © OpenStreetMap contributors (ODbL)
 - Ferry photo: “Port Jefferson ferry” — Finavon / Wikimedia Commons, CC BY-SA 3.0
+- Site photos: Wikimedia Commons contributors (John Feinberg, Andre Carrotflower, Doug Kerr, Iracaz, Wusel007, Mike Peel) — CC BY / CC BY-SA / public domain; each credited in-game
 - Not affiliated with the Bridgeport & Port Jefferson Steamboat Company
 
 Full list: [docs/CREDITS.md](docs/CREDITS.md). Earlier Stony Brook prototype: [`GALACTUS06/sb-go`](https://github.com/GALACTUS06/sb-go) (tag `sbu-archive-v0.1.5`).
