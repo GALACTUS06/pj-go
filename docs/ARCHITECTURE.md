@@ -5,7 +5,7 @@
 ```text
 ┌─────────────────────────────────────────────┐
 │                 React (Vite)                │
-│  Home / Play / Puzzle / Settings            │
+│  Home / Play / Shipyard / Finale / Settings │
 ├──────────────┬──────────────────────────────┤
 │ Zustand save │  PlayScene (3D)              │
 │ localStorage │  - OSM white boxes           │
@@ -47,16 +47,18 @@ src/
   app routes & shell
   config/        brand, geo origin, features
   copy/          en.ts
-  data/          checkpoints.ts
-  domain/        geo, checkIn, save, types
+  data/          checkpoints.ts, story.ts (parts, games, tools, Hal), places.ts
+  domain/        geo, checkIn, save, types, collision, route
+  games/         9 mini games + shared loop/key helpers
   location/      usePlayerLocation (GPS)
-  scene/         Canvas, Buildings, Avatar, Checkpoints, Cameras, Controls
+  scene/         Canvas, Buildings, Avatar, Checkpoints, Tools, RouteLine, Cameras, Controls
   state/         useGameStore
   storage/       load/save
-  pages/         Home, Play, Puzzle, Settings, FallbackSites
+  pages/         Home, Play, Shipyard, Finale, Settings, FallbackSites
 public/
-  geo/           buildings + water
-  finale/        ferry-puzzle.jpg
+  geo/           buildings + water + roads
+  sites/         per-site photos
+  finale/        ferry-puzzle.jpg (finale photo)
   icons/
 ```
 
@@ -65,6 +67,8 @@ public/
 **Camera / controls as built:** both cameras orbit at a player-controlled yaw (drag the view or Q/E); the stick is camera-relative. Follow sits 8 m back / 5 m up; Overview sits 40 m back / 95 m up. Buildings and water are solid for stick and auto-walk movement (Live GPS is never blocked; a walker left inside a footprint can walk out). In Overview the avatar carries a depth-test-free pin that stays visible behind rooftops.
 
 **Navigation as built:** OSM streets and footways become a graph (shared nodes join ways; segments crossing walls are dropped; the largest connected component is kept). Every 1.5 m of movement, or when Next changes, A* plans from the walker's nearest clear road point to the road point nearest the site that is on open ground. The scene draws it as a blue ribbon; the Next chip shows the remaining walking distance, and its arrow points 10 m ahead along the route so it turns at corners. **Walk route** steers the walker 2.5 m ahead along the route and turns the camera with it, stopping on arrival, when the stick is touched, or after 1.5 s without progress.
+
+**Story as built (v0.3.0):** check-in opens the site sheet → mini game modal (intro → play → lost with retry; skip appears after the first loss) → part reward. Winning or skipping calls `checkIn(siteId)`, so `checkedInSiteIds` doubles as "parts earned". Tools are `Place`s like sites: the HUD updater picks them up within 10 m (GPS accuracy widens it) and the navigator targets the nearest unfinished site or tool. Save stays `version: 1` (`checkedInSiteIds`, `toolIds`, `storySeen`, `finaleRevealed` = launched); old `puzzlePieceIds` is ignored. Games run on `requestAnimationFrame` with dt capped at 50 ms and register keys in the capture phase so Space/Enter don't reach the walker; the play page also ignores movement keys while any `aria-modal` dialog is open.
 
 ## 5. Input
 

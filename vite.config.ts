@@ -17,7 +17,7 @@ export default defineConfig({
       manifest: {
         name: 'PJ Go',
         short_name: 'PJ Go',
-        description: 'Explore Port Jefferson harbor — collect 9 pieces, reveal the ferry.',
+        description: 'Explore Port Jefferson harbor — earn 9 ship parts, find 3 tools, build your sloop.',
         theme_color: '#0B1F33',
         background_color: '#F4F7FA',
         display: 'standalone',

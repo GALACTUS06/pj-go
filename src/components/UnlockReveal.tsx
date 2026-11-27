@@ -1,19 +1,21 @@
 import { useNavigate } from 'react-router-dom'
-import { ASSETS } from '../config/assets'
-import { en } from '../copy/en'
-import { SITES, TOTAL_PIECES } from '../data/checkpoints'
+import { TOTAL_PIECES } from '../data/checkpoints'
 import { photoFor } from '../data/sitePhotos'
+import { PARTS, SITE_STORY, TOOLS } from '../data/story'
 import type { Site } from '../domain/types'
 import { useGame } from '../state/useGameStore'
+import { ItemIcon } from './ItemIcon'
 import { SitePhotoFigure } from './SitePhotoFigure'
 
-/** Celebration shown right after a check-in: the site's photo and the new puzzle piece. */
+/** Reward after a site's mini game: the site's photo, the ship part earned, and Hal's comment. */
 export function UnlockReveal({ site, onClose }: { site: Site; onClose: () => void }) {
   const navigate = useNavigate()
-  const collected = useGame((s) => s.puzzlePieceIds)
-  const complete = collected.length >= TOTAL_PIECES
+  const parts = useGame((s) => s.checkedInSiteIds.length)
+  const tools = useGame((s) => s.toolIds.length)
+  const story = SITE_STORY[site.id]
+  const part = PARTS[story.part]
   const photo = photoFor(site.id)
-  const slots = [...SITES].sort((a, b) => a.puzzleSlot - b.puzzleSlot)
+  const ready = parts >= TOTAL_PIECES && tools >= TOOLS.length
 
   return (
     <div className="unlock-backdrop" onClick={onClose}>
@@ -24,39 +26,30 @@ export function UnlockReveal({ site, onClose }: { site: Site; onClose: () => voi
         aria-labelledby="unlock-title"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="unlock-kicker">{en.unlock.kicker(collected.length, TOTAL_PIECES)}</p>
+        <p className="unlock-kicker">Part earned · {site.name}</p>
         {photo && <SitePhotoFigure photo={photo} className="unlock-photo" />}
-        <h2 id="unlock-title">{site.name}</h2>
-
-        <div className="unlock-board" aria-label={en.unlock.board}>
-          <img className="board-ghost" src={ASSETS.finale} alt="" aria-hidden />
-          {slots.map((s) => {
-            const on = collected.includes(s.id)
-            return (
-              <span
-                key={s.id}
-                className={`unlock-cell${on ? ' is-on' : ''}${s.id === site.id ? ' is-new' : ''}`}
-                style={
-                  on
-                    ? {
-                        backgroundImage: `url(${ASSETS.finale})`,
-                        backgroundPosition: `${(s.puzzleSlot % 3) * 50}% ${Math.floor(s.puzzleSlot / 3) * 50}%`,
-                      }
-                    : undefined
-                }
-              />
-            )
-          })}
+        <div className="reward-part">
+          <span className="reward-icon">
+            <ItemIcon id={story.part} size={44} />
+          </span>
+          <div>
+            <h2 id="unlock-title">{part.name}</h2>
+            <p className="muted">{part.blurb}</p>
+          </div>
         </div>
+        <p className="reward-hal">{story.reward}</p>
+        <p className="reward-progress">
+          Parts {parts}/{TOTAL_PIECES} · Tools {tools}/{TOOLS.length}
+        </p>
 
         <div className="sheet-actions">
-          {complete ? (
-            <button className="btn btn-primary" onClick={() => navigate('/puzzle')}>
-              {en.sheet.openPuzzle}
+          {ready ? (
+            <button className="btn btn-primary" onClick={() => navigate('/shipyard')}>
+              Go to Hal’s shipyard
             </button>
           ) : (
             <button className="btn btn-primary" onClick={onClose}>
-              {en.unlock.continue}
+              Keep exploring
             </button>
           )}
         </div>

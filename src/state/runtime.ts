@@ -41,7 +41,7 @@ export const nav = {
 }
 
 if (import.meta.env.DEV) {
-  Object.assign(window, { __pj: { player, input, gps, nav } })
+  Object.assign(window, { __pj: { player, input, gps, nav, teleport: (x: number, z: number) => teleport(x, z) } })
 }
 
 export function setAutoWalk(on: boolean) {
@@ -77,6 +77,8 @@ export type HudState = {
   /** True while the street route to Next is known. */
   hasRoute: boolean
   autoWalk: boolean
+  /** Tool just picked up, shown until the player closes the notice. */
+  foundToolId: string | null
 }
 
 export const useHud = create<HudState>()(() => ({
@@ -90,4 +92,5 @@ export const useHud = create<HudState>()(() => ({
   outsideBox: false,
   hasRoute: false,
   autoWalk: false,
+  foundToolId: null,
 }))

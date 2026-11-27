@@ -729,35 +729,6 @@ a {
   font-size: 1.4rem;
   text-align: center;
 }
-.unlock-board {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
-  width: 176px;
-  aspect-ratio: 4 / 3;
-  margin: 0 auto;
-  padding: 3px;
-  border-radius: 8px;
-  background: var(--pj-navy);
-}
-.unlock-cell {
-  border-radius: 3px;
-  background: rgba(28, 53, 80, 0.45);
-  background-size: 300% 300%;
-}
-.unlock-cell.is-new {
-  animation: cell-pop 0.6s 0.35s ease-out both;
-  box-shadow: 0 0 0 2px var(--pj-marker);
-}
-@keyframes cell-pop {
-  from {
-    transform: scale(0.2);
-    opacity: 0;
-  }
-  70% {
-    transform: scale(1.25);
-  }
-}
 .unlock-credit {
   margin: 0.6rem 0 0;
   font-size: 0.7rem;
@@ -826,92 +797,579 @@ a {
   margin-top: 1rem;
 }
 
-/* ---------- Puzzle ---------- */
+/* ---------- Story intro ---------- */
 
-/* Faint, blurred whole picture behind locked cells, so sky-only pieces read as part of it. */
-.puzzle-grid,
-.unlock-board {
-  position: relative;
-  isolation: isolate;
-}
-.board-ghost {
+.story {
   position: absolute;
-  z-index: -1;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  object-fit: cover;
-  filter: blur(4px) grayscale(0.4);
-  opacity: 0.6;
-  pointer-events: none;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(6, 20, 31, 0.6);
 }
-.puzzle-grid.is-complete .board-ghost {
-  display: none;
+.story-card {
+  width: 100%;
+  max-width: 24rem;
+  padding: 0 0 1.1rem;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--pj-white);
+  box-shadow: 0 14px 40px rgba(6, 20, 31, 0.45);
+  animation: unlock-in 0.4s ease-out;
+}
+.story-card > :not(svg) {
+  margin-left: 1.2rem;
+  margin-right: 1.2rem;
+}
+.story-art {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+.story-card .coach-count {
+  margin-bottom: 0.15rem;
+}
+.story-card p {
+  margin-top: 0;
 }
 
-.puzzle-grid {
+/* ---------- Rewards & items ---------- */
+
+.item-icon {
+  flex: none;
+}
+.site-slot .item-icon {
+  filter: brightness(0) invert(1);
+}
+.sheet-ask,
+.mg-ask {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 4px solid var(--pj-marker);
+  border-radius: 8px;
+  background: #fff8e6;
+  font-style: italic;
+}
+.badge-part {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+}
+.reward-part {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.reward-part h2 {
+  margin: 0;
+  text-align: left;
+}
+.reward-part .muted {
+  margin: 0.15rem 0 0;
+}
+.reward-icon {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  aspect-ratio: 4 / 3;
-  margin-top: 1rem;
-  padding: 6px;
-  border-radius: 14px;
-  background: var(--pj-navy);
-  transition: gap 0.4s ease;
+  place-items: center;
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: #fff4d6;
+  box-shadow: inset 0 0 0 2px var(--pj-marker);
+  animation: cell-pop 0.6s 0.3s ease-out both;
 }
-.puzzle-grid.is-complete {
-  gap: 0;
+.reward-icon-lg {
+  width: 96px;
+  height: 96px;
+  margin: 0.2rem auto 0.7rem;
+  border-radius: 24px;
 }
-.puzzle-cell {
+@keyframes cell-pop {
+  from {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.2);
+  }
+}
+.reward-hal {
+  margin: 0.9rem 0 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  background: var(--pj-foam);
+  font-style: italic;
+}
+.reward-progress {
+  margin: 0.7rem 0 0;
+  font-size: var(--pj-size-small);
+  font-weight: var(--pj-weight-bold);
+  text-align: center;
+  color: var(--pj-sea);
+}
+.tool-found {
+  text-align: center;
+}
+.tool-found .sheet-actions {
+  justify-content: center;
+}
+.world-label.is-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(13, 148, 136, 0.9);
+}
+.world-label.is-tool .item-icon {
+  filter: brightness(0) invert(1);
+}
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pj-sea);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---------- Mini games ---------- */
+
+.mg-modal {
+  max-width: 28rem;
+}
+.mg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mg-head .unlock-kicker {
+  margin: 0;
+  text-align: left;
+}
+.mg-close {
+  min-height: 34px;
+  padding: 0.2rem 0.6rem;
+}
+.mg-modal h2 {
+  margin: 0.2rem 0 0;
+  text-align: left;
+}
+.mg-reward-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.8rem 0 0.4rem;
+}
+.mg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.mg-score {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: var(--pj-size-small);
+  font-weight: var(--pj-weight-bold);
+}
+.mg-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--pj-mist);
+}
+.mg-progress span {
+  display: block;
+  height: 100%;
+  background: var(--pj-sea);
+}
+.mg-feedback {
+  min-height: 1.4em;
+  margin: 0;
+  font-weight: var(--pj-weight-bold);
+  text-align: center;
+}
+.mg-hint {
+  margin: 0;
+  text-align: center;
+}
+.mg-pair {
+  display: flex;
+  gap: 0.6rem;
+}
+.mg-pair .btn-lg {
+  flex: 1;
+  width: auto;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Dock the ferry */
+.dock-water {
   position: relative;
+  height: 110px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #cfe3ef 0 38%, var(--pj-sea) 38%);
+  transition: box-shadow 0.2s;
+}
+.dock-water.is-ok {
+  box-shadow: inset 0 0 0 4px var(--pj-marker-done);
+}
+.dock-water.is-miss {
+  box-shadow: inset 0 0 0 4px var(--pj-ferry-red);
+}
+.dock-slip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 4px solid #8a5a2b;
+  border-right: 4px solid #8a5a2b;
+  background: rgba(240, 180, 41, 0.28);
+}
+.dock-ferry {
+  position: absolute;
+  top: 34px;
+}
+
+/* Carry the frame */
+.frame-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+  background: #eef3f7;
+}
+.frame-svg {
+  width: 100%;
+  height: 130px;
+}
+.frame-meter {
+  height: 8px;
+  border-radius: 4px;
+  transition: width 0.1s linear;
+}
+
+/* Steam-bend planks */
+.steam-stage {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.steam-gauge {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 160px;
+  overflow: hidden;
+  border: 2px solid var(--pj-navy);
+  border-radius: 17px;
+  background: linear-gradient(0deg, #9fc3d6, #fbe3c8);
+}
+.steam-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(91, 140, 90, 0.75);
+}
+.steam-hot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: rgba(200, 16, 46, 0.55);
+}
+.steam-needle {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  margin-bottom: -2px;
+  background: var(--pj-navy-ink);
+}
+.steam-plank {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Knot drill */
+.knot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.knot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 96px;
+  padding: 0.5rem;
+  border: 3px solid var(--knot);
+  border-radius: 14px;
+  background: var(--pj-white);
+  color: var(--knot);
+  font: inherit;
+  font-weight: var(--pj-weight-bold);
+  font-size: var(--pj-size-small);
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.1s;
+}
+.knot svg {
+  width: 44px;
+  height: 44px;
+}
+.knot:disabled {
+  cursor: default;
+}
+.knot.is-lit,
+.knot:active:not(:disabled) {
+  background: var(--knot);
+  color: var(--pj-white);
+  transform: scale(1.05);
+}
+
+/* History quiz */
+.quiz-q {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: var(--pj-weight-medium);
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.quiz-opt {
+  min-height: var(--pj-tap-min);
+  padding: 0.55rem 0.9rem;
+  border: 2px solid var(--pj-mist);
+  border-radius: 12px;
+  background: var(--pj-white);
+  color: var(--pj-navy);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.quiz-opt:disabled {
+  cursor: default;
+}
+.quiz-opt.is-right {
+  border-color: var(--pj-marker-done);
+  background: #e8f3e7;
+}
+.quiz-opt.is-wrong {
+  border-color: var(--pj-ferry-red);
+  background: #fde8eb;
+}
+
+/* Sail match */
+.match-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+}
+.match-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  border-radius: 8px;
-  background: rgba(28, 53, 80, 0.45);
-  background-size: 300% 300%;
-  color: #c4d3e0;
+  aspect-ratio: 3 / 4;
+  padding: 0.2rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--pj-navy);
+  color: var(--pj-white);
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.match-card.is-up {
+  color: var(--pj-navy);
+  transform: scale(1.03);
+}
+.match-card.is-matched {
+  box-shadow: inset 0 0 0 3px var(--pj-marker-done);
+  opacity: 0.7;
+}
+.match-glyph {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.match-name {
+  margin-top: 0.2rem;
+  font-size: 0.62rem;
+  font-weight: var(--pj-weight-bold);
+  line-height: 1.1;
   text-align: center;
 }
-.is-complete .puzzle-cell {
-  border-radius: 0;
+.match-back {
+  font-weight: 800;
+  color: var(--pj-marker);
 }
-.puzzle-cell.is-on {
-  animation: piece-in 0.35s ease-out;
+
+/* Catch provisions */
+.catch-field {
+  position: relative;
+  display: flex;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #cfe3ef, #eef3f7 80%, var(--pj-sand) 80%);
+}
+.catch-lane {
+  flex: 1;
+  border: 0;
+  border-right: 1px dashed rgba(11, 31, 51, 0.15);
+  background: transparent;
+  cursor: pointer;
+}
+.catch-lane:last-of-type {
+  border-right: 0;
+}
+.catch-item,
+.catch-basket {
+  position: absolute;
+  font-size: 1.7rem;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.catch-basket {
+  bottom: 4px;
+  transform: translateX(-50%);
+  font-size: 2.1rem;
+  transition: left 0.1s ease-out;
+}
+
+/* Meadow timeline */
+.timeline-done {
+  min-height: 2rem;
+  margin: 0;
+  padding-left: 1.4rem;
+  font-size: var(--pj-size-small);
+}
+.timeline-done li {
+  margin-bottom: 0.2rem;
+}
+.timeline-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.timeline-card {
+  min-height: var(--pj-tap-min);
+  padding: 0.6rem 0.9rem;
+  border: 2px solid var(--pj-navy);
+  border-radius: 12px;
+  background: var(--pj-white);
+  color: var(--pj-navy);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.timeline-card.is-wrong {
+  border-color: var(--pj-ferry-red);
+  animation: shake 0.35s;
+}
+@keyframes shake {
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+/* Red right returning */
+.rr-channel {
+  overflow: hidden;
+  border-radius: 12px;
+  transition: box-shadow 0.2s;
+}
+.rr-channel svg {
+  display: block;
+  width: 100%;
+}
+.rr-channel.is-ok {
+  box-shadow: 0 0 0 4px var(--pj-marker-done);
+}
+.rr-channel.is-miss {
+  box-shadow: 0 0 0 4px var(--pj-ferry-red);
+}
+
+/* ---------- Shipyard ---------- */
+
+.shipyard-stage {
+  margin: 0.8rem 0 0.4rem;
+  padding: 0.5rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #dbe9f2, #f4f7fa);
+}
+.shipyard-stage.is-building .sloop-hull {
+  animation: build-shake 0.3s 6;
+  transform-origin: 160px 170px;
+}
+@keyframes build-shake {
+  25% {
+    transform: rotate(-1.5deg);
+  }
+  75% {
+    transform: rotate(1.5deg);
+  }
+}
+.sloop {
+  display: block;
+  width: 100%;
+}
+.sloop-part.is-on {
+  animation: piece-in 0.5s ease-out;
 }
 @keyframes piece-in {
   from {
-    transform: scale(0.85);
     opacity: 0;
   }
 }
-.puzzle-num {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #e6eef5;
-  text-shadow: 0 1px 4px rgba(6, 20, 31, 0.6);
+.shipyard-h {
+  margin-top: 1rem;
+  font-size: 1.05rem;
 }
-.puzzle-name {
-  padding: 0 0.3rem;
-  font-size: 0.68rem;
-  line-height: 1.2;
+.item-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.puzzle-cell.is-on .puzzle-name {
-  position: absolute;
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
-  padding: 0.1rem 0.3rem;
-  border-radius: 5px;
-  background: rgba(6, 20, 31, 0.6);
-  color: var(--pj-white);
+.item-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--pj-mist);
+  opacity: 0.6;
 }
-.is-complete .puzzle-name {
-  display: none;
+.item-list li.is-on {
+  opacity: 1;
+}
+.item-name {
+  display: flex;
+  flex-direction: column;
+  font-weight: var(--pj-weight-medium);
+}
+.item-name small {
+  font-weight: 400;
+  color: #66788a;
+}
+.is-on .item-name small {
+  color: var(--pj-marker-done);
 }
 
 /* ---------- Finale ---------- */
@@ -922,12 +1380,51 @@ a {
   background: var(--pj-navy-ink);
   color: var(--pj-white);
 }
-.finale-img {
+.finale-sea {
+  overflow: hidden;
+  background: linear-gradient(180deg, #f6b26b, #e98a6b 40%, #4a6fa5);
+}
+.sloop.is-sailing .sloop-hull {
+  animation: sail-out 9s ease-in-out infinite;
+}
+@keyframes sail-out {
+  0% {
+    transform: translate(-60%, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-25%, 2px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translate(10%, -1px) rotate(1deg);
+  }
+  75% {
+    transform: translate(40%, 2px) rotate(-1deg);
+  }
+  100% {
+    transform: translate(80%, 0) rotate(0deg);
+  }
+}
+.finale-body {
+  margin: 0.4rem 0 0;
+  color: #dbe7ef;
+}
+.finale-ferry {
+  margin: 1.2rem 0 0;
+  overflow: hidden;
+  border-radius: 14px;
+}
+.finale-ferry img {
   display: block;
   width: 100%;
-  max-height: 62vh;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   animation: fade-in 1.2s ease-out;
+}
+.finale-ferry figcaption {
+  padding: 0.4rem 0.7rem;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: var(--pj-size-small);
+  color: #9fc3d6;
 }
 @keyframes fade-in {
   from {

@@ -14,19 +14,10 @@ export function canCheckIn(opts: {
   return d < effectiveRadiusM(opts.radiusM, opts.accuracyM)
 }
 
-export function grantPiece(
-  checkedInSiteIds: string[],
-  puzzlePieceIds: string[],
-  siteId: string,
-): { checkedInSiteIds: string[]; puzzlePieceIds: string[]; granted: boolean } {
-  if (checkedInSiteIds.includes(siteId)) {
-    return { checkedInSiteIds, puzzlePieceIds, granted: false }
-  }
-  return {
-    checkedInSiteIds: [...checkedInSiteIds, siteId],
-    puzzlePieceIds: puzzlePieceIds.includes(siteId) ? puzzlePieceIds : [...puzzlePieceIds, siteId],
-    granted: true,
-  }
+/** Adds `id` once; `granted` is false when it was already there. */
+export function grantOnce(ids: string[], id: string): { ids: string[]; granted: boolean } {
+  if (ids.includes(id)) return { ids, granted: false }
+  return { ids: [...ids, id], granted: true }
 }
 
 type Pt = { id: string; x: number; z: number }

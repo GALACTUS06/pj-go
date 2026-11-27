@@ -3,7 +3,8 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import data from '../../data/checkpoints.template.json'
 import photos from '../../data/site-photos.json'
-import { canCheckIn, grantPiece, siteInRange } from './checkIn'
+import { PARTS, PART_ORDER, SITE_STORY, TOOLS } from '../data/story'
+import { canCheckIn, grantOnce, siteInRange } from './checkIn'
 import { blockedAt, buildingObstacles, moveWithObstacles, segmentBlocked, toObstacles } from './collision'
 import { GEO, distM, latLngToLocal, localToLatLng, pointInBBox } from './geo'
 import { buildRoadGraph, findRoute, pointAlong } from './route'
@@ -60,12 +61,12 @@ describe('check-in', () => {
     expect(canCheckIn({ ...base, siteX: 0, liveOutsideBox: true })).toBe(false)
   })
 
-  it('grants each piece once', () => {
-    const a = grantPiece([], [], 'ferry-terminal')
+  it('grants each part once', () => {
+    const a = grantOnce([], 'ferry-terminal')
     expect(a.granted).toBe(true)
-    const b = grantPiece(a.checkedInSiteIds, a.puzzlePieceIds, 'ferry-terminal')
+    const b = grantOnce(a.ids, 'ferry-terminal')
     expect(b.granted).toBe(false)
-    expect(b.checkedInSiteIds).toEqual(['ferry-terminal'])
+    expect(b.ids).toEqual(['ferry-terminal'])
   })
 
   it('picks the nearest site when radii overlap', () => {
@@ -75,10 +76,17 @@ describe('check-in', () => {
 })
 
 describe('save', () => {
-  it('fills tutorialDone for older saves', () => {
-    const s = migrateSave({ version: 1, checkedInSiteIds: ['ferry-terminal'] })
+  it('keeps progress from older saves and fills new fields', () => {
+    const s = migrateSave({ version: 1, checkedInSiteIds: ['ferry-terminal'], puzzlePieceIds: ['ferry-terminal'] })
     expect(s.tutorialDone).toBe(false)
+    expect(s.storySeen).toBe(false)
+    expect(s.toolIds).toEqual([])
     expect(s.checkedInSiteIds).toEqual(['ferry-terminal'])
+  })
+
+  it('drops unknown tool ids', () => {
+    const s = migrateSave({ version: 1, toolIds: ['saw', 'spoon'] }, undefined, ['saw'])
+    expect(s.toolIds).toEqual(['saw'])
   })
 
   it('drops unknown site ids and duplicates', () => {
@@ -189,6 +197,28 @@ describe('navigation', () => {
     ]
     expect(pointAlong(line, 15)).toEqual({ x: 10, z: 5 })
     expect(pointAlong(line, 99)).toEqual({ x: 10, z: 10 })
+  })
+})
+
+describe('story', () => {
+  it('gives every site its own part and mini game', () => {
+    const stories = sites.map((s) => SITE_STORY[s.id])
+    stories.forEach((st, i) => expect(st, sites[i].id).toBeDefined())
+    expect(new Set(stories.map((s) => s.part)).size).toBe(9)
+    expect(new Set(stories.map((s) => s.game)).size).toBe(9)
+    expect([...PART_ORDER].sort()).toEqual(stories.map((s) => s.part).sort())
+    for (const p of PART_ORDER) expect(PARTS[p].name).toBeTruthy()
+  })
+
+  it('puts every tool on open ground, outside site rings, reachable by street', () => {
+    for (const t of TOOLS) {
+      expect(blockedAt(t.x, t.z, walls), t.id).toBe(false)
+      for (const s of sites) expect(distM(t.x, t.z, s.x, s.z), `${t.id}/${s.id}`).toBeGreaterThan(s.radiusM + 10)
+      const r = findRoute(graph, spawn, t, walls)
+      expect(r, t.id).not.toBeNull()
+      const end = r!.points[r!.points.length - 1]
+      expect(distM(end.x, end.z, t.x, t.z), t.id).toBeLessThan(10)
+    }
   })
 })
 

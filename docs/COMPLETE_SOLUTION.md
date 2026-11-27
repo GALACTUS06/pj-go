@@ -9,7 +9,9 @@
 | Client | Web + PWA (mobile-first) |
 | Maps | Free only (OSM white-box + optional Esri underlay) — **no Google Maps** |
 | Completion | **Virtual mode required**; Live GPS optional |
-| Win state | Collect **9 puzzle pieces** → reveal **PJ↔Bridgeport ferry** finale |
+| Win state | Win a mini game at each of **9 sites** (one ship part each) + pick up **3 street tools** → build the sloop at Hal's Shipyard → sail out past the PJ↔Bridgeport ferry |
+
+> **v0.3.0 change:** the 3×3 ferry puzzle was replaced by the storyline (newcomer misses the last ferry; Hal the shipwright helps build a sloop), 9 Port Jeff mini games, 3 street tools and the Shipyard page. Sections below that mention puzzle pieces describe the v0.1–v0.2 MVP; see README and ARCHITECTURE §4 for the current flow.
 
 Related docs (detail packs):
 

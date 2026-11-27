@@ -5,9 +5,13 @@ import { ErrorBoundary, canWebGL } from '../components/ErrorBoundary'
 import { Joystick } from '../components/Joystick'
 import { SitesDrawer } from '../components/SitesDrawer'
 import { showToast } from '../components/Toast'
+import { StoryIntro } from '../components/StoryIntro'
+import { ToolFound } from '../components/ToolFound'
 import { TutorialCoach } from '../components/TutorialCoach'
 import { en } from '../copy/en'
 import { TOTAL_PIECES, siteById } from '../data/checkpoints'
+import { placeById } from '../data/places'
+import { TOOLS, TOTAL_ITEMS } from '../data/story'
 import { usePlayerLocation } from '../location/usePlayerLocation'
 import { PlayCanvas } from '../scene/PlayCanvas'
 import { useHarborGeo } from '../scene/useHarborGeo'
@@ -30,6 +34,11 @@ function useKeyboard(onCheckIn: () => void, onCamera: () => void) {
     }
     const kd = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement) return
+      if (document.querySelector('[aria-modal="true"]')) {
+        down.clear()
+        sync()
+        return
+      }
       const k = e.key.toLowerCase()
       if (k === 'enter' || k === ' ') {
         e.preventDefault()
@@ -71,6 +80,9 @@ export function PlayPage() {
   const camera = useGame((s) => s.cameraPreference)
   const reducedMotion = useGame((s) => s.reducedMotion) || prefersReducedMotion()
   const collected = useGame((s) => s.checkedInSiteIds)
+  const tools = useGame((s) => s.toolIds)
+  const storySeen = useGame((s) => s.storySeen)
+  const setStorySeen = useGame((s) => s.setStorySeen)
   const setMode = useGame((s) => s.setMode)
   const toggleCamera = useGame((s) => s.toggleCamera)
   const hud = useHud()
@@ -102,10 +114,10 @@ export function PlayPage() {
   const fallback = <FallbackSitesPage reason="webgl" />
   if (!webgl || params.get('fallback') === '1') return fallback
 
-  const next = siteById(hud.nextId)
+  const next = placeById(hud.nextId)
   const near = siteById(hud.nearId)
   const sheetSite = siteById(sheetId)
-  const allDone = collected.length >= TOTAL_PIECES
+  const allDone = collected.length >= TOTAL_PIECES && tools.length >= TOOLS.length
 
   return (
     <div
@@ -146,8 +158,8 @@ export function PlayPage() {
       )}
 
       <header className="hud-top">
-        <Link className="chip chip-strong" to="/puzzle">
-          {en.play.pieces(collected.length, TOTAL_PIECES)}
+        <Link className="chip chip-strong" to="/shipyard">
+          {en.play.ship(collected.length + tools.length, TOTAL_ITEMS)}
         </Link>
         <div className="hud-top-right">
           <button className="chip" onClick={() => setDrawer(true)}>
@@ -164,7 +176,7 @@ export function PlayPage() {
 
       <div className="hud-center">
         {allDone ? (
-          <Link className="next-chip is-done" to="/puzzle">
+          <Link className="next-chip is-done" to="/shipyard">
             {en.play.allDone}
           </Link>
         ) : next ? (
@@ -208,8 +220,10 @@ export function PlayPage() {
         </div>
       </footer>
 
+      {!storySeen && <StoryIntro onDone={setStorySeen} />}
       <TutorialCoach mode={mode} />
       {sheetSite && <CheckInSheet site={sheetSite} onClose={() => setSheetId(null)} />}
+      {hud.foundToolId && <ToolFound toolId={hud.foundToolId} onClose={() => useHud.setState({ foundToolId: null })} />}
       {drawer && <SitesDrawer onClose={() => setDrawer(false)} />}
     </div>
   )

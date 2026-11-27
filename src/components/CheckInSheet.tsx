@@ -1,27 +1,37 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { en } from '../copy/en'
-import { TOTAL_PIECES } from '../data/checkpoints'
 import { photoFor } from '../data/sitePhotos'
+import { PARTS, SITE_STORY } from '../data/story'
 import type { Site } from '../domain/types'
 import { useGame } from '../state/useGameStore'
+import { ItemIcon } from './ItemIcon'
+import { MiniGameModal } from './MiniGameModal'
 import { SitePhotoFigure } from './SitePhotoFigure'
 import { UnlockReveal } from './UnlockReveal'
 
+type View = 'sheet' | 'game' | 'reward'
+
 export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => void }) {
-  const navigate = useNavigate()
   const collectedIds = useGame((s) => s.checkedInSiteIds)
   const checkIn = useGame((s) => s.checkIn)
-  const [revealed, setRevealed] = useState(false)
+  const [view, setView] = useState<View>('sheet')
   const collected = collectedIds.includes(site.id)
-  const complete = collectedIds.length >= TOTAL_PIECES
+  const story = SITE_STORY[site.id]
   const photo = collected ? photoFor(site.id) : null
 
-  if (revealed) return <UnlockReveal site={site} onClose={onClose} />
-
-  const collect = () => {
-    if (checkIn(site.id)) setRevealed(true)
+  if (view === 'game') {
+    return (
+      <MiniGameModal
+        site={site}
+        onClose={() => setView('sheet')}
+        onWin={() => {
+          checkIn(site.id)
+          setView('reward')
+        }}
+      />
+    )
   }
+  if (view === 'reward') return <UnlockReveal site={site} onClose={onClose} />
 
   return (
     <div className="sheet-backdrop" onClick={onClose}>
@@ -34,7 +44,7 @@ export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => voi
       >
         <div className="sheet-handle" />
         {photo && <SitePhotoFigure photo={photo} className="sheet-photo" />}
-        <p className="sheet-kicker">{site.priority ? 'Landmark' : 'Harbor stop'} · Piece {site.puzzleSlot + 1}</p>
+        <p className="sheet-kicker">{site.priority ? 'Landmark' : 'Harbor stop'}</p>
         <h2 id="sheet-title">{site.name}</h2>
         <p className="sheet-blurb">{site.blurb}</p>
         <ul className="sheet-facts">
@@ -42,6 +52,7 @@ export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => voi
             <li key={f}>{f}</li>
           ))}
         </ul>
+        {!collected && <p className="sheet-ask">{story.ask}</p>}
         {site.sources?.length ? (
           <p className="sheet-sources">
             {en.sheet.sources}:{' '}
@@ -61,16 +72,12 @@ export function CheckInSheet({ site, onClose }: { site: Site; onClose: () => voi
         )}
         <div className="sheet-actions">
           {collected ? (
-            complete ? (
-              <button className="btn btn-primary" onClick={() => navigate('/puzzle')}>
-                {en.sheet.openPuzzle}
-              </button>
-            ) : (
-              <span className="badge-done">✓ {en.sheet.collected}</span>
-            )
+            <span className="badge-done badge-part">
+              <ItemIcon id={story.part} size={22} /> {PARTS[story.part].name} earned
+            </span>
           ) : (
-            <button className="btn btn-primary" onClick={collect}>
-              {en.sheet.collect}
+            <button className="btn btn-primary" onClick={() => setView('game')}>
+              Help out: {story.gameTitle}
             </button>
           )}
           <button className="btn btn-ghost" onClick={onClose}>

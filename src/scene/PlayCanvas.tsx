@@ -3,6 +3,7 @@ import type { CameraMode, PlayMode } from '../domain/types'
 import { Checkpoints } from './Checkpoints'
 import { Avatar, CameraRig, Controller, HudUpdater } from './Player'
 import { RouteLine } from './RouteLine'
+import { Tools } from './Tools'
 import type { HarborGeo } from './useHarborGeo'
 import { Buildings, Ground, Roads, Water } from './World'
 
@@ -30,6 +31,7 @@ export function PlayCanvas({ geo, mode, camera, reducedMotion }: Props) {
       <RouteLine reducedMotion={reducedMotion} />
       <Buildings features={geo.buildings.features} />
       <Checkpoints />
+      <Tools />
       <Avatar camera={camera} />
       <Controller mode={mode} walls={geo.walls} />
       <CameraRig mode={camera} reducedMotion={reducedMotion} />

@@ -5,9 +5,10 @@ import { useGame } from '../state/useGameStore'
 
 export function TutorialCoach({ mode }: { mode: PlayMode }) {
   const done = useGame((s) => s.tutorialDone)
+  const storySeen = useGame((s) => s.storySeen)
   const complete = useGame((s) => s.completeTutorial)
   const [step, setStep] = useState(0)
-  if (done) return null
+  if (done || !storySeen) return null
   const steps = mode === 'live' ? en.tutorial.liveSteps : en.tutorial.steps
   const s = steps[step]
   const last = step === steps.length - 1

@@ -3,10 +3,12 @@ import { useRef } from 'react'
 import * as THREE from 'three'
 import { showToast } from '../components/Toast'
 import { en } from '../copy/en'
-import { MOVEMENT, SITES, siteById } from '../data/checkpoints'
+import { MOVEMENT, SITES } from '../data/checkpoints'
+import { PLACES, placeById } from '../data/places'
+import { TOOLS, TOOL_PICKUP_M } from '../data/story'
 import { siteInRange, nearestSite } from '../domain/checkIn'
 import { moveWithObstacles, type Obstacle } from '../domain/collision'
-import { clampToPlayable, distM } from '../domain/geo'
+import { clampToPlayable, distM, effectiveRadiusM } from '../domain/geo'
 import { findRoute, pointAlong, progressAlong, type RoadGraph } from '../domain/route'
 import type { CameraMode, PlayMode } from '../domain/types'
 import { useGame } from '../state/useGameStore'
@@ -192,7 +194,8 @@ export function HudUpdater({ mode, graph, walls }: { mode: PlayMode; graph: Road
     if (acc.current < 0.1) return
     acc.current = 0
 
-    const { checkedInSiteIds, navBeaconSiteId } = useGame.getState()
+    const game = useGame.getState()
+    const { checkedInSiteIds, toolIds, navBeaconSiteId } = game
     const hud = useHud.getState()
     const live = mode === 'live'
     const outside = live && hud.outsideBox
@@ -202,11 +205,22 @@ export function HudUpdater({ mode, graph, walls }: { mode: PlayMode; graph: Road
     const inRange = waitingGps ? null : siteInRange(player.x, player.z, SITES, accuracy, outside)
     const near = nearestSite(player.x, player.z, SITES)
 
-    const beacon = siteById(navBeaconSiteId)
+    if (!waitingGps && !outside) {
+      for (const t of TOOLS) {
+        if (toolIds.includes(t.id)) continue
+        if (distM(player.x, player.z, t.x, t.z) < effectiveRadiusM(TOOL_PICKUP_M, accuracy) && game.pickUpTool(t.id)) {
+          setAutoWalk(false)
+          useHud.setState({ foundToolId: t.id })
+        }
+      }
+    }
+
+    const done = [...checkedInSiteIds, ...useGame.getState().toolIds]
+    const beacon = placeById(navBeaconSiteId)
     const target =
-      beacon && !checkedInSiteIds.includes(beacon.id)
+      beacon && !done.includes(beacon.id)
         ? beacon
-        : (nearestSite(player.x, player.z, SITES, checkedInSiteIds)?.site ?? null)
+        : (nearestSite(player.x, player.z, PLACES, done)?.site ?? null)
 
     const targetId = target?.id ?? null
     const start = nav.route?.points[0]

@@ -1,14 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { APP_VERSION } from '../config/assets'
 import { en } from '../copy/en'
-import { TOTAL_PIECES } from '../data/checkpoints'
+import { TOTAL_ITEMS } from '../data/story'
 import { useGame } from '../state/useGameStore'
 
 export function HomePage() {
   const navigate = useNavigate()
   const mode = useGame((s) => s.modePreference)
   const setMode = useGame((s) => s.setMode)
-  const pieces = useGame((s) => s.checkedInSiteIds.length)
+  const found = useGame((s) => s.checkedInSiteIds.length + s.toolIds.length)
   const live = mode === 'live'
 
   return (
@@ -26,13 +26,11 @@ export function HomePage() {
       <main className="home-main">
         <div className="home-progress">
           <div className="home-dots" aria-hidden>
-            {Array.from({ length: TOTAL_PIECES }, (_, i) => (
-              <span key={i} className={i < pieces ? 'on' : ''} />
+            {Array.from({ length: TOTAL_ITEMS }, (_, i) => (
+              <span key={i} className={i < found ? 'on' : ''} />
             ))}
           </div>
-          <span>
-            {pieces}/{TOTAL_PIECES} pieces
-          </span>
+          <span>{en.play.ship(found, TOTAL_ITEMS)}</span>
         </div>
 
         <button className="btn btn-primary btn-lg" onClick={() => navigate('/play')}>
@@ -44,7 +42,16 @@ export function HomePage() {
         <p className="muted home-mode">{en.home.modeLine(live)}</p>
 
         <nav className="home-links">
-          <Link to="/puzzle">{en.home.puzzle}</Link>
+          <Link to="/shipyard">{en.home.shipyard}</Link>
+          <button
+            className="link-button"
+            onClick={() => {
+              useGame.setState({ storySeen: false })
+              navigate('/play')
+            }}
+          >
+            {en.home.story}
+          </button>
           <Link to="/settings">{en.home.settings}</Link>
         </nav>
       </main>

@@ -26,8 +26,8 @@ Keep this file in sync with every external file under `public/`.
 | License | **CC BY-SA 3.0** |
 | Source | https://commons.wikimedia.org/wiki/File:Port_Jefferson_ferry.JPG |
 | Retrieved | 2026-11-20 (via images.weserv.nl resize proxy) |
-| Adaptation | Cropped to the ferry, stacks and shoreline (1225×919) so every puzzle piece shows part of the scene |
-| Share-alike note | Adapted puzzle crops of this image remain under CC BY-SA 3.0; credit this entry. |
+| Adaptation | Cropped to the ferry, stacks and shoreline (1225×919); shown on the finale screen as you sail out past the ferry |
+| Share-alike note | The adapted crop remains under CC BY-SA 3.0; credit this entry. |
 
 **On-screen Settings credits line:**
 
@@ -37,7 +37,7 @@ Keep this file in sync with every external file under `public/`.
 
 ## Site unlock photos
 
-Shown when a piece is unlocked and in the site sheet afterwards. Files: `public/sites/<id>.jpg` (resized to 960 px), metadata in `data/site-photos.json`, fetched by `scripts/fetch-site-photos.py` on 2026-11-21. Each photo carries its own credit line in-game. Commons has no free photo of the Mather House or the Drowned Meadow Cottage, so those two sites show the nearest identified streetscape, captioned as such.
+Shown when a site's ship part is earned and in the site sheet afterwards. Files: `public/sites/<id>.jpg` (resized to 960 px), metadata in `data/site-photos.json`, fetched by `scripts/fetch-site-photos.py` on 2026-11-21. Each photo carries its own credit line in-game. Commons has no free photo of the Mather House or the Drowned Meadow Cottage, so those two sites show the nearest identified streetscape, captioned as such.
 
 | Site | Commons file | Author | License |
 |------|--------------|--------|---------|
@@ -70,6 +70,14 @@ Not affiliated with Bridgeport & Port Jefferson Steamboat Company trademarks.
 If Esri World Imagery is enabled at runtime:
 
 > Tiles © Esri — follow current Esri attribution string in the HUD/Settings.
+
+---
+
+## Story and mini games
+
+Hal, the deckhand, the volunteers and the other people in the story are fictional. All story text, mini games, the sloop drawing, story illustrations and item icons are original SVG/CSS. Mini-game emoji (provisions, sailmaker's supplies) render with the device's system emoji font.
+
+Facts used in the quiz and timeline: the village was called Drowned Meadow until it was renamed for Thomas Jefferson in 1836; it was a major 19th-century shipbuilding harbor; the Bridgeport & Port Jefferson Steamboat Company dates from 1883; the village incorporated in 1963. Buoy rule: "red, right, returning" (US IALA-B system).
 
 ---
 
